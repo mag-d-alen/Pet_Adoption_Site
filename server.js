@@ -26,9 +26,10 @@ db.once('open', function () {
 const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, unique: true, required: true },
+  email: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   password: { type: String, required: true },
+  role: { type: String, required: true },
   dateCreated: { type: Date, default: Date.now },
 });
 
@@ -43,7 +44,7 @@ app.use('/pet', petRoutes);
 app.use('/user', userRoutes);
 
 app.post('/signup', async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, password } = req.body;
+  const { firstName, lastName, email, phoneNumber, role, password } = req.body;
 
   try {
     const userAlreadyExist = await User.findOne({ email: email });
@@ -56,12 +57,12 @@ app.post('/signup', async (req, res) => {
         lastName: lastName,
         email: email,
         phoneNumber: phoneNumber,
+        role: role,
         password: hashedPassword,
       });
       user
         .save()
         .then((user) => {
-          console.log(user);
           res.status(200).json(`new user: ${user.firstName} was created`);
         })
         .catch((error) => res.status(500).json({ error }));
@@ -82,13 +83,13 @@ app.post('/login', async (req, res) => {
       bcrypt.compare(password, userTobeAuthorised.password, (error, result) => {
         if (result) {
           const token = jwt.sign(
-            { email: userTobeAuthorised.email, userId: userTobeAuthorised._id },
+            { email: userTobeAuthorised.email },
             SECRET_KEY,
             { expiresIn: '1h' }
           );
-          res.status(200).json('Login successful');
-          console.log(token);
-          return token;
+          return res
+            .status(200)
+            .json({ message: 'Login successful', token: token });
         } else if (error) {
           res.status(400).json('authorisation failed');
           console.log('authorisation failed');
@@ -99,7 +100,7 @@ app.post('/login', async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    res.status(400).json(error);
   }
 });
 
