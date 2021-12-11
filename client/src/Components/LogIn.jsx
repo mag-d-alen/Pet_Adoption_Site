@@ -1,6 +1,7 @@
 /** @format */
 
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import AppContext from '../context/AppContext';
 import { Grid, Paper, TextField, Button, Typography } from '@material-ui/core';
 import styled from '@emotion/styled';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -9,6 +10,7 @@ import axios from 'axios';
 const url = 'http://localhost:8000';
 
 export default function LogIn(props) {
+  const { setIsLoggedIn } = useContext(AppContext);
   const initialValues = {
     email: '',
     password: '',
@@ -17,10 +19,15 @@ export default function LogIn(props) {
     email: Yup.string().email('please enter valid email').required('Required'),
     password: Yup.string().required('Required'),
   });
+
   const onSubmit = async (values, props) => {
+    const result = await axios.post(`${url}/login`, values);
+    if (result.status === 200) {
+      setIsLoggedIn(true);
+      console.log(result.data.token, result.data.message);
+    }
     props.resetForm();
     props.setSubmitting(false);
-    await axios.post(`${url}/login`, values);
   };
   const handleSetIsRegistered = () => {
     props.handleSetIsRegistered(false);

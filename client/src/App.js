@@ -1,30 +1,29 @@
 /** @format */
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import LogIn from './Components/LogIn';
 import Home from './Components/Home';
+import CreatePet from './Components/CreatePet';
+import AppContext from './context/AppContext';
+
 require('dotenv').config();
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
-    <div>
+    <AppContext.Provider
+      value={{ isLoggedIn: isLoggedIn, setIsLoggedIn: setIsLoggedIn }}
+    >
       <BrowserRouter>
         <Navbar />
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/login' element={<LogIn />} />
-
-          {/* <Route path='/' element={token ? <Home /> : <Login />} />
-          <Route path='/signup' element={token ? <Profile /> : <SignUp />} />
-          <Route path='/login' element={token ? <Home /> : <Login />} />
-
-          {token && (
-            <Route path='/profile' element={token ? <Profile /> : <Login />} />
-          )} */}
+          <Route path='/admin/addPet' element={<CreatePet />} />
         </Routes>
       </BrowserRouter>
-    </div>
+    </AppContext.Provider>
   );
 }
 

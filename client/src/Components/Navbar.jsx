@@ -3,7 +3,7 @@
 //material-theme
 // create theme context wrpa app in it -> no need for consumer
 //
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Dialog,
   AppBar,
@@ -18,8 +18,11 @@ import styled from '@emotion/styled';
 import { Menu } from '@mui/icons-material';
 import SignUp from './SignUp';
 import LogIn from './LogIn';
+import AppContext from '../context/AppContext';
 
 export default function Navbar() {
+  const { isLoggedIn } = useContext(AppContext);
+
   const [open, setOpen] = React.useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
@@ -50,25 +53,31 @@ export default function Navbar() {
           >
             <Menu />
           </IconButton>
-          <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              onBackdropClick={handleBackdropClick}
-              disableEscapeKeyDown
-            >
-              <DialogContent>
-                {!isRegistered ? (
-                  <SignUp handleSetIsRegistered={handleSetIsRegistered} />
-                ) : (
-                  <LogIn handleSetIsRegistered={handleSetIsRegistered} />
-                )}
-              </DialogContent>
-            </Dialog>
-          </Typography>
-          <Button color='inherit' onClick={handleOpen}>
-            Login
-          </Button>
+          {!isLoggedIn && (
+            <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                onBackdropClick={handleBackdropClick}
+                disableEscapeKeyDown
+              >
+                <DialogContent>
+                  {!isRegistered ? (
+                    <SignUp handleSetIsRegistered={handleSetIsRegistered} />
+                  ) : (
+                    <LogIn handleSetIsRegistered={handleSetIsRegistered} />
+                  )}
+                </DialogContent>
+              </Dialog>
+            </Typography>
+          )}
+          {isLoggedIn ? (
+            <StyledDiv>Welcome</StyledDiv>
+          ) : (
+            <Button color='inherit' onClick={handleOpen}>
+              Login
+            </Button>
+          )}
         </Toolbar>
       </StyledAppBar>
     </Box>
@@ -78,4 +87,7 @@ export default function Navbar() {
 const StyledAppBar = styled(AppBar)`
   background-color: rgb(66, 60, 54);
   color: rgb(255, 243, 230);
+`;
+const StyledDiv = styled('div')`
+  margin-left: auto;
 `;
