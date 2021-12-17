@@ -26,7 +26,8 @@ app.use('/pet', petRoutes);
 app.use('/user', userRoutes);
 
 app.post('/signup', async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, role, password } = req.body;
+  const { firstName, lastName, email, phoneNumber, role, password, id } =
+    req.body;
 
   try {
     const userAlreadyExist = await User.findOne({ email: email });
@@ -41,13 +42,16 @@ app.post('/signup', async (req, res) => {
         phoneNumber: phoneNumber,
         role: role,
         password: hashedPassword,
+        id: id,
       });
+      console.log(user);
       user
         .save()
         .then((user) => {
           res.status(200).json(`new user: ${user.firstName} was created`);
         })
         .catch((error) => res.status(500).json({ error }));
+      res.send(error);
     }
   } catch (error) {
     res.status(400).json(error);

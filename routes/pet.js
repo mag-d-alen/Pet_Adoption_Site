@@ -102,17 +102,4 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-//logged users only
-router.post('/:id/adopt', (req, res) => {
-  res.send(`adopt ${req.params.id}`);
-});
-
-router.get('/user/:id', (req, res) => {
-  res.send('pets owned by a specific user');
-});
-
-router.delete('/:id/save', (req, res) => {
-  res.send('remove saved pet');
-});
-
 module.exports = router;
