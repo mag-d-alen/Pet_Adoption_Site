@@ -31,6 +31,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import UpdatePetPopup from './UpdatePetPopup';
 import AppContext from '../context/AppContext';
+import axios from 'axios';
+const url = 'http://localhost:8000/user';
 
 export default function Pet(props) {
   const {
@@ -68,6 +70,36 @@ export default function Pet(props) {
   const handleRemovePet = () => {
     console.log('remove');
   };
+  const handleSave = async () => {
+    try {
+      const result = await axios.post(`${url}/${currentUser.id}/save`, {
+        id,
+      });
+      console.log(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleAdopt = async () => {
+    try {
+      const result = await axios.post(`${url}/${currentUser.id}/adopt`, {
+        id,
+      });
+      console.log(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleFoster = async () => {
+    try {
+      const result = await axios.post(`${url}/${currentUser.id}/foster`, {
+        id,
+      });
+      console.log(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleBackdropClick = (event) => {
     event.stopPropagation();
@@ -83,9 +115,7 @@ export default function Pet(props) {
           component='div'
           title={name}
           subheader={type}
-        >
-          {/* {name} {type} */}
-        </CardHeader>{' '}
+        ></CardHeader>{' '}
         <CardMedia
           component='img'
           height='140'
@@ -98,16 +128,20 @@ export default function Pet(props) {
         </CardContent>
         <CardActions disableSpacing>
           <StyledFooter>
-            {currentUser.role == 'admin' ? (
+            {currentUser?.role == 'admin' && (
+              <UpdatePetPopup initialValues={props.pet} />
+            )}
+            {currentUser && (
               <>
-                <Button size='small'>delete</Button>
-                <UpdatePetPopup initialValues={props.pet} />
-              </>
-            ) : (
-              <>
-                <Button size='small'>save</Button>
-                <Button size='small'>foster</Button>
-                <Button size='small'>adopt</Button>
+                <Button size='small' onClick={handleSave}>
+                  save
+                </Button>
+                <Button size='small' onClick={handleFoster}>
+                  foster
+                </Button>
+                <Button size='small' onClick={handleAdopt}>
+                  adopt
+                </Button>
               </>
             )}
             <ExpandMore
@@ -122,7 +156,7 @@ export default function Pet(props) {
               <Typography>Weight: {weight} kg</Typography>
               <Typography>Height: {height} cm</Typography>
               <Typography>{!hypoallergenic && 'Not'} hypoallergenic</Typography>
-              <Typography paragraph>{bio}</Typography>
+              <Typography body>{bio}</Typography>
             </Collapse>
           </StyledFooter>
         </CardActions>
@@ -136,11 +170,14 @@ const StyledCard = styled(Card)`
   flex-direction: column;
   justify-items: space-between;
   min-width: 25rem;
+  max-width: 50rem;
+  height: 100%;
 `;
 const StyledDiv = styled('div')`
   text-transform: uppercase;
   display: flex;
   margin: 1rem;
+  height: 100%;
 `;
 const StyledFooter = styled('footer')`
   width: 100%;

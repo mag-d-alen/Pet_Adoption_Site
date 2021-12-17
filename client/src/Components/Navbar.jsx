@@ -59,17 +59,16 @@ export default function Navbar() {
     <Box sx={{ flexGrow: 1 }}>
       <StyledAppBar position='static'>
         <Toolbar>
-          {isLoggedIn && (
-            <IconButton
-              size='large'
-              edge='start'
-              color='inherit'
-              aria-label='menu'
-              onClick={handleOpenSidebar}
-            >
-              <Menu />
-            </IconButton>
-          )}
+          <IconButton
+            size='large'
+            edge='start'
+            color='inherit'
+            aria-label='menu'
+            onClick={handleOpenSidebar}
+          >
+            <Menu />
+          </IconButton>
+
           {!isLoggedIn && (
             <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
               <Dialog
@@ -96,7 +95,7 @@ export default function Navbar() {
           )}
           {isLoggedIn ? (
             <StyledDiv>
-              Welcome {currentUser.firstName} {currentUser.lastName}
+              Welcome {currentUser.firstName} {currentUser.lastName}!
             </StyledDiv>
           ) : (
             <Button color='inherit' onClick={handleOpen}>

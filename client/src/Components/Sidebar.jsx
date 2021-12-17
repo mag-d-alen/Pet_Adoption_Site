@@ -20,7 +20,7 @@ import AdminHome from './AdminHome';
 
 export default function Sidebar(props) {
   const { currentUser } = React.useContext(AppContext);
-  const id = currentUser.id;
+  const id = currentUser?.id;
   return (
     <StyledBox role='presentation'>
       <List>
@@ -30,24 +30,27 @@ export default function Sidebar(props) {
           </ListItemIcon>
           <ListItemText primary='Search' />
         </ListItem>
-        <ListItem button key='Profile'>
-          <ListItemIcon>
-            <MailIcon />
-          </ListItemIcon>
-          <Link to='/user/' params={{ id: id }}>
-            Profile
-          </Link>
-        </ListItem>
-        <ListItem button key='Home'>
-          <ListItemIcon>
-            <MailIcon />
-          </ListItemIcon>
-          <Link to='/myPets' params={{ id: id }}>
-            My Pets
-          </Link>
-        </ListItem>
 
-        {currentUser.role == 'admin' && (
+        {currentUser && (
+          <>
+            <ListItem button key='Profile'>
+              <ListItemIcon>
+                <MailIcon />
+              </ListItemIcon>
+              <Link to='/user/' params={{ id }}>
+                Profile
+              </Link>
+            </ListItem>
+            <ListItem button key='Home'>
+              <ListItemIcon>
+                <MailIcon />
+              </ListItemIcon>
+              <Link to='/myPets'>My Pets</Link>
+            </ListItem>
+          </>
+        )}
+
+        {currentUser?.role == 'admin' && (
           <ListItem button key='admin'>
             <ListItemIcon>
               <MailIcon />

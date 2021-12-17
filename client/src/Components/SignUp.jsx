@@ -8,6 +8,8 @@ import styled from '@emotion/styled';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
+import { v4 as uuidv4 } from 'uuid';
+
 const url = 'http://localhost:8000';
 
 export default function SignUp(props) {
@@ -48,8 +50,14 @@ export default function SignUp(props) {
 
   const handleSubmit = async (values, actions) => {
     try {
-      const newUser = { ...values, role: 'user' };
+      const newUser = {
+        ...values,
+        role: 'user',
+        id: uuidv4(),
+      };
+      console.log(newUser);
       const result = await axios.post(`${url}/signup`, newUser);
+      console.log(result);
       actions.setSubmitting(true);
       handleSetIsRegistered();
       setTimeout(() => {
