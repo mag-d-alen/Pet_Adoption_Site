@@ -2,7 +2,15 @@
 
 import React, { useState, useContext } from 'react';
 import AppContext from '../context/AppContext';
-import { Grid, Paper, TextField, Button, Typography } from '@material-ui/core';
+import {
+  Grid,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Box,
+} from '@material-ui/core';
+import CloseIcon from '@mui/icons-material/Close';
 import styled from '@emotion/styled';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -10,7 +18,7 @@ import axios from 'axios';
 const url = 'http://localhost:8000';
 
 export default function LogIn(props) {
-  const { setIsLoggedIn } = useContext(AppContext);
+  const { setIsLoggedIn, setCurrentUser, currentUser } = useContext(AppContext);
   const initialValues = {
     email: '',
     password: '',
@@ -21,75 +29,108 @@ export default function LogIn(props) {
   });
 
   const onSubmit = async (values, props) => {
-    const result = await axios.post(`${url}/login`, values);
-    if (result.status === 200) {
-      setIsLoggedIn(true);
-      console.log(result.data.token, result.data.message);
+    try {
+      const result = await axios.post(`${url}/login`, values);
+      if (result.status === 200) {
+        console.log(result.data.user);
+        setCurrentUser(result.data.user);
+        setIsLoggedIn(true);
+      }
+      props.resetForm();
+      props.setSubmitting(false);
+    } catch (error) {
+      console.log(error);
     }
-    props.resetForm();
-    props.setSubmitting(false);
   };
+
   const handleSetIsRegistered = () => {
     props.handleSetIsRegistered(false);
   };
 
   return (
-    <Grid>
-      <StyledPaper>
-        <Grid align='center'>
-          <StyledHeader>Log In</StyledHeader>
-        </Grid>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          validationSchema={validationSchema}
-        >
-          {(props) => (
-            <Form>
-              <Field
-                as={TextField}
-                label='email'
-                name='email'
-                placeholder='Enter email'
-                fullWidth
-                required
-                helperText={<ErrorMessage name='email' />}
-              />
-              <Field
-                as={TextField}
-                label='Password'
-                name='password'
-                placeholder='Enter password'
-                type='password'
-                fullWidth
-                required
-                helperText={<ErrorMessage name='password' />}
-              />
-              <Button
-                type='submit'
-                color='inherit'
-                variant='contained'
-                disabled={props.isSubmitting}
-                fullWidth
-              >
-                {props.isSubmitting ? 'Loading' : 'Sign in'}
-              </Button>
-            </Form>
-          )}
-        </Formik>
-        <Typography>
-          Don't have an account yet?
-          <Button onClick={handleSetIsRegistered}>Sign Up</Button>
-        </Typography>
-      </StyledPaper>
-    </Grid>
+    <StyledDiv>
+      <StyledIcon
+        onClick={props.handleClose}
+        variant='contained'
+        color='inherit'
+      />
+
+      <Grid align='center'>
+        <StyledHeader>Log In</StyledHeader>
+      </Grid>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validationSchema={validationSchema}
+      >
+        {(props) => (
+          <Form>
+            <Field
+              as={TextField}
+              label='email'
+              name='email'
+              placeholder='Enter email'
+              fullWidth
+              required
+              helperText={<ErrorMessage name='email' />}
+            />
+            <Field
+              as={TextField}
+              label='Password'
+              name='password'
+              placeholder='Enter password'
+              type='password'
+              fullWidth
+              required
+              helperText={<ErrorMessage name='password' />}
+            />
+            <StyledButton
+              type='submit'
+              color='inherit'
+              variant='contained'
+              disabled={props.isSubmitting}
+            >
+              {props.isSubmitting ? 'Loading' : 'Log in'}
+            </StyledButton>
+          </Form>
+        )}
+      </Formik>
+      <StyledButton onClick={handleSetIsRegistered}>Sign Up</StyledButton>
+    </StyledDiv>
   );
 }
-const StyledPaper = styled(Paper)`
-  padding: 1rem;
+
+const StyledDiv = styled('div')`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  padding: 1.5rem;
   width: 30rem;
   margin: 0 auto;
 `;
 const StyledHeader = styled('h1')`
   margin: 0 auto;
+`;
+const StyledButton = styled('button')`
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem auto;
+  width: 20rem;
+  padding: 0.5rem;
+  text-transform: uppercase;
+  border: none;
+  color: white;
+  border-radius: 0.2rem;
+  background-color: #aaa8a8;
+  &:hover {
+    background-color: #44281a;
+  }
+`;
+const StyledIcon = styled(CloseIcon)`
+  margin-left: auto;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
 `;
