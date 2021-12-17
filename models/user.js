@@ -1,5 +1,6 @@
 /** @format */
-
+const { SECRET_KEY, DB_PASSWORD } = process.env;
+const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
 const url = `mongodb+srv://Mag:${DB_PASSWORD}@cluster0.norka.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
@@ -21,3 +22,4 @@ const UserSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model('User', UserSchema);
+module.exports = User;

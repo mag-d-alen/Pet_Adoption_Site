@@ -10,34 +10,16 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const User = require('./models/User');
 
 const { SECRET_KEY, DB_PASSWORD } = process.env;
 
 const { MongoClient } = require('mongodb');
 const url = `mongodb+srv://Mag:${DB_PASSWORD}@cluster0.norka.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
-mongoose.connect(url);
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  console.log('Connection Successful!');
-});
-
-const UserSchema = new mongoose.Schema({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
-  password: { type: String, required: true },
-  role: { type: String, required: true },
-  dateCreated: { type: Date, default: Date.now },
-});
-
-const User = mongoose.model('User', UserSchema);
-
 //middleware
 app.use(cors());
-app.use(express.json()); // req.body.text will work
+app.use(express.json());
 
 // routes
 app.use('/pet', petRoutes);
@@ -87,15 +69,17 @@ app.post('/login', async (req, res) => {
             SECRET_KEY,
             { expiresIn: '1h' }
           );
-          return res
-            .status(200)
-            .json({ message: 'Login successful', token: token });
+          return res.status(200).json({
+            message: 'Login successful',
+            token: token,
+            user: userTobeAuthorised,
+          });
         } else if (error) {
           res.status(400).json('authorisation failed');
           console.log('authorisation failed');
         } else {
           res.status(400).json("passwords don't match");
-          console.log('passwords dont match');
+          console.log("passwords don't match");
         }
       });
     }
