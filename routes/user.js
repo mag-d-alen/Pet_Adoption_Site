@@ -5,16 +5,18 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const { SECRET_KEY, DB_PASSWORD } = process.env;
 const cors = require('cors');
+const authenticate = require('../middleware.js');
+
 app.use(express.json());
 
 const User = require('../models/User');
 
 //protected route for editing user settings
-router.put('/:id', (req, res) => {
+router.put('/:id', authenticate, (req, res) => {
   res.send('data updated');
 });
 
-router.get('/:userId', (req, res) => {
+router.get('/:userId', authenticate, (req, res) => {
   try {
     const userId = req.params.userId;
 
@@ -27,11 +29,11 @@ router.get('/:userId', (req, res) => {
 
 //admin only
 
-router.get('/:id/full', (req, res) => {
+router.get('/:id/full', authenticate, (req, res) => {
   res.send(req.params.id);
 });
 
-router.get('/', async (req, res) => {
+router.get('/', authenticate, async (req, res) => {
   try {
     const users = await User.find();
     console.log(users);
@@ -42,7 +44,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/:id/save', async (req, res) => {
+router.post('/:id/save', authenticate, async (req, res) => {
   try {
     const savedPet = { id: req.body.id };
     const updatedUser = await User.findOneAndUpdate(
@@ -57,7 +59,7 @@ router.post('/:id/save', async (req, res) => {
   }
 });
 
-router.post('/:id/foster', async (req, res) => {
+router.post('/:id/foster', authenticate, async (req, res) => {
   try {
     const fosteredPet = { id: req.body.id };
     const updatedUser = await User.findOneAndUpdate(
@@ -71,7 +73,7 @@ router.post('/:id/foster', async (req, res) => {
     console.log(error);
   }
 });
-router.post('/:id/adopt', async (req, res) => {
+router.post('/:id/adopt', authenticate, async (req, res) => {
   try {
     const adoptedPet = { id: req.body.id };
     const updatedUser = await User.findOneAndUpdate(
@@ -86,11 +88,11 @@ router.post('/:id/adopt', async (req, res) => {
   }
 });
 
-router.get('/user/:id', (req, res) => {
+router.get('/user/:id', authenticate, (req, res) => {
   res.send('pets owned by a specific user');
 });
 
-router.delete('/:id/save', (req, res) => {
+router.delete('/:id/save', authenticate, (req, res) => {
   res.send('remove saved pet');
 });
 

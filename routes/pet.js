@@ -1,9 +1,12 @@
 /** @format */
+
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const { SECRET_KEY, DB_PASSWORD } = process.env;
 const cors = require('cors');
+const authenticate = require('../middleware.js');
+
 //protected route for adding pets
 const { MongoClient } = require('mongodb');
 const Pet = require('../models/Pet');
@@ -65,14 +68,26 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-//get searched pets
-router.get('/search', async (req, res) => {
+router.get('/search', authenticate, async (req, res) => {
+  const { maxWeight, minWeight, maxHeight, minHeight, ...searchedPets } =
+    req.query;
+
   try {
-    const petArray = await Pet.find(JSON.parse(req.query.searchedPets));
+    const petArray = await Pet.find(searchedPets)
+      .where('weight')
+      .gte(minWeight)
+      .lte(maxWeight)
+      .where('height')
+      .gte(minHeight)
+      .lte(maxHeight);
+    console.log('PetArray: ', petArray.length);
+    if (petArray.length < 1) {
+      res.send('no pets');
+      return;
+    }
     res.send(petArray);
   } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
+    res.status(500).send(error);
   }
 });
 
