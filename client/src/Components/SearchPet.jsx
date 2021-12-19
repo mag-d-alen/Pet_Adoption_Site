@@ -4,10 +4,6 @@ import React, { useState, useContext } from 'react';
 import {
   Grid,
   Paper,
-  FormControl,
-  Button,
-  Typography,
-  InputAdornment,
   InputLabel,
   Input,
   MenuItem,
@@ -17,27 +13,33 @@ import { Pets as Icon } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import axios from 'axios';
 import AppContext from '../context/AppContext';
+import { createAxiosHeaderGetReq } from '../lib/CreateAxiosReq';
 const url = 'http://localhost:8000';
 
-export default function SearchPet() {
+export default function SearchPet(props) {
   const [searchedPetType, setSearchedPetType] = useState('');
-  const { petList, setPetList } = useContext(AppContext);
+  const { token } = useContext(AppContext);
   const typeOptions = ['cat', 'dog', 'turtle', 'piglet', 'snake', 'chinchilla'];
+  const { handleSetPetList } = props;
   const handleChange = (e) => {
     setSearchedPetType(e.target.value);
   };
-  const handleFindPets = async () => {
+  const handleFindPets = async (props) => {
     const searchedPets = {
       type: searchedPetType,
+      maxWeight: '20',
+      minWeight: '0',
+      maxHeight: '160',
+      minHeight: '0',
     };
 
-    const petListData = await axios.get(`${url}/pet/search`, {
-      params: {
-        searchedPets,
-      },
-    });
-    setPetList(petListData.data);
+    const petListData = await axios.get(
+      `${url}/pet/search`,
+      createAxiosHeaderGetReq(token, searchedPets)
+    );
+    handleSetPetList(petListData.data);
   };
+
   return (
     <StyledPaper>
       <StyledDiv>

@@ -10,6 +10,7 @@ import {
   Typography,
   Box,
 } from '@material-ui/core';
+import { Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import styled from '@emotion/styled';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -18,7 +19,9 @@ import axios from 'axios';
 const url = 'http://localhost:8000';
 
 export default function LogIn(props) {
-  const { setIsLoggedIn, setCurrentUser, currentUser } = useContext(AppContext);
+  const { setIsLoggedIn, setCurrentUser, currentUser, token, setToken } =
+    useContext(AppContext);
+  const [notification, setNotification] = useState(false);
   const initialValues = {
     email: '',
     password: '',
@@ -32,15 +35,18 @@ export default function LogIn(props) {
     try {
       const result = await axios.post(`${url}/login`, values);
       if (result.status === 200) {
-        console.log(result.data.user);
         setCurrentUser(result.data.user);
+        setToken(result.data.token);
         setIsLoggedIn(true);
       }
       props.resetForm();
       props.setSubmitting(false);
     } catch (error) {
-      console.log(error);
+      setNotification(true);
     }
+  };
+  const clearAlert = () => {
+    setNotification(false);
   };
 
   const handleSetIsRegistered = () => {
@@ -49,6 +55,7 @@ export default function LogIn(props) {
 
   return (
     <StyledDiv>
+      {notification && <Alert severity='error'>Log in failed</Alert>}
       <StyledIcon
         onClick={props.handleClose}
         variant='contained'
@@ -64,7 +71,7 @@ export default function LogIn(props) {
         validationSchema={validationSchema}
       >
         {(props) => (
-          <Form>
+          <Form onKeyDown={clearAlert}>
             <Field
               as={TextField}
               label='email'

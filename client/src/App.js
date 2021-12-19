@@ -7,6 +7,7 @@ import Home from './Components/Home';
 import CreatePet from './Components/CreatePet';
 import UpdatePet from './Components/UpdatePet';
 import AdminHome from './Components/AdminHome';
+import Search from './Components/Search';
 import AppContext from './context/AppContext';
 import './App.css';
 
@@ -14,34 +15,37 @@ require('dotenv').config();
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [petList, setPetList] = useState('');
+
   const [openSidebar, setOpenSidebar] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [token, setToken] = useState('');
 
   return (
     <AppContext.Provider
       value={{
         isLoggedIn,
         setIsLoggedIn,
-        petList,
-        setPetList,
         setOpenSidebar,
         openSidebar,
         currentUser,
         setCurrentUser,
+        token,
+        setToken,
       }}
     >
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path='/' element={<Home />} />
-          {currentUser?.role == 'admin' && (
+          <Route exact path='/' element={<Home />} />
+          <Route path='/searchpet' element={<Search />} />
+          {token && currentUser.role === 'admin' && (
             <>
               <Route path='/admin' element={<AdminHome />} />
-              <Route path='/admin/addPet' element={<CreatePet />} />
-              <Route path='/admin/updatePet/:id' element={<UpdatePet />} />
+              <Route exact path='/admin/addPet' element={<CreatePet />} />
+              {/* <Route path='/admin/updatePet/:id' element={<UpdatePet />} /> */}
             </>
           )}
+          />
         </Routes>
       </BrowserRouter>
     </AppContext.Provider>

@@ -17,8 +17,8 @@ import styled from '@emotion/styled';
 import AppContext from '../context/AppContext';
 import Pet from './Pet';
 
-export default function PetList() {
-  const { petList } = useContext(AppContext);
+export default function PetList(props) {
+  const { petList } = props;
   return (
     <StyledGrid>
       {petList.length > 0 &&

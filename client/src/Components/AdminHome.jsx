@@ -2,22 +2,25 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router';
-import { Grid, FormControl, Button, Link } from '@material-ui/core';
+import { Grid, FormControl, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import axios from 'axios';
 import PetList from './PetList';
 import UserList from './UserList';
 import AppContext from '../context/AppContext';
 import CreatePet from './CreatePet';
+import { createAxiosHeaderGetReq } from '../lib/CreateAxiosReq';
 
 // import { Link } from 'react-router-dom';
 
 const url = 'http://localhost:8000';
 
 export default function AdminHome() {
+  const { token } = useContext(AppContext);
   const [showPets, setShowPets] = useState(false);
   const [showUsers, setShowUsers] = useState([]);
-  const { setPetList, petList } = useContext(AppContext);
+  const [petList, setPetList] = useState([]);
 
   const showAllPets = async () => {
     if (showPets) {
@@ -25,7 +28,10 @@ export default function AdminHome() {
     } else {
       setShowUsers([]);
       try {
-        const pets = await axios.get(`${url}/pet`);
+        const pets = await axios.get(
+          `${url}/pet`,
+          createAxiosHeaderGetReq(token)
+        );
         setPetList(pets.data);
         setShowPets(true);
       } catch (error) {
@@ -40,7 +46,10 @@ export default function AdminHome() {
     } else {
       try {
         setShowPets(false);
-        const users = await axios.get(`${url}/user`);
+        const users = await axios.get(
+          `${url}/user`,
+          createAxiosHeaderGetReq(token)
+        );
         setShowUsers(users.data);
       } catch (error) {
         console.log(error);
@@ -49,16 +58,12 @@ export default function AdminHome() {
   };
 
   return (
-    <Grid>
+    <Grid align='center'>
       <h1>The home of every Admin</h1>
       <Button onClick={showAllPets}>Show all pets</Button>
       <Button onClick={showAllUsers}>Show all users</Button>
-
-      <StyledLink button href='./addPet'>
-        Add Pet
-      </StyledLink>
-
-      {showPets && <PetList />}
+      <StyledLink to='./addPet'>Add Pet</StyledLink>
+      {showPets && <PetList petList={petList} />}
       {showUsers && <UserList userList={showUsers} />}
     </Grid>
   );

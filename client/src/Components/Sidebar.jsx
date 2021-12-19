@@ -1,6 +1,6 @@
 /** @format */
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -12,23 +12,28 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import styled from '@emotion/styled';
 import AppContext from '../context/AppContext';
-import AdminHome from './AdminHome';
+import SearchPet from './SearchPet';
 
 export default function Sidebar(props) {
+  const [openSearch, setOpenSearch] = useState(false);
   const { currentUser } = React.useContext(AppContext);
   const id = currentUser?.id;
+
+  const handleToggleOpenSearch = () => {
+    setOpenSearch(!openSearch);
+    // props.handleOpenSidebar();
+  };
   return (
-    <StyledBox role='presentation'>
+    <Drawer variant='permanent'>
       <List>
-        <ListItem button key='Search' onClick={props.handleToggleOpenSearch}>
+        <ListItem button onClick={handleToggleOpenSearch}>
           <ListItemIcon>
             <MailIcon />
           </ListItemIcon>
-          <ListItemText primary='Search' />
+          <StyledLink to='/searchpet'>Search</StyledLink>
         </ListItem>
 
         {currentUser && (
@@ -37,34 +42,55 @@ export default function Sidebar(props) {
               <ListItemIcon>
                 <MailIcon />
               </ListItemIcon>
-              <Link to='/user/' params={{ id }}>
+              <StyledLink to='/user/' params={{ id }}>
                 Profile
-              </Link>
+              </StyledLink>
             </ListItem>
             <ListItem button key='Home'>
               <ListItemIcon>
                 <MailIcon />
               </ListItemIcon>
-              <Link to='/myPets'>My Pets</Link>
+              <StyledLink to='/myPets'>My Pets</StyledLink>
             </ListItem>
+            {openSearch && <SearchPet />}
+
+            {currentUser.role === 'admin' && (
+              <ListItem button key='admin'>
+                <ListItemIcon>
+                  <MailIcon />
+                </ListItemIcon>
+                <StyledLink to='/admin'>Admin</StyledLink>
+              </ListItem>
+            )}
           </>
         )}
-
-        {currentUser?.role == 'admin' && (
-          <ListItem button key='admin'>
-            <ListItemIcon>
-              <MailIcon />
-            </ListItemIcon>
-            <Link to='/admin'>Admin</Link>
-          </ListItem>
-        )}
       </List>
-    </StyledBox>
+    </Drawer>
   );
 }
-const StyledBox = styled(Box)`
-  width: 10rem;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.07);
-  margin-right: auto;
+// const StyledBox = styled(Box)`
+//   display: flex;
+//   flex-direction: column;
+//   justify-items: center;
+//   width: 10rem;
+//   height: 100%;
+//   background-color: rgba(0, 0, 0, 0.07);
+//   margin: 10rem auto 0 0;
+// `;
+
+const StyledLink = styled(Link)`
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.87);
+  line-height: 1.75;
+  padding: 6px 16px;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.87);
+  }
+  &:visited {
+    color: rgba(0, 0, 0, 0.87);
+  }
 `;

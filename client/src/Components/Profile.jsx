@@ -83,7 +83,7 @@ export default function PetForm(props) {
     <Grid>
       <StyledPaper>
         <Grid align='center'>
-          <Typography variant='caption' gutterBottom>
+          <Typography variant='caption'>
             Please fill this form to add or update new pet data.
           </Typography>
         </Grid>

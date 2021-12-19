@@ -1,21 +1,7 @@
 /** @format */
 
 import React, { useState, useEffect, useContext } from 'react';
-import {
-  Paper,
-  MenuItem,
-  TextField,
-  Grid,
-  Box,
-  Select,
-  InputLabel,
-  FormControl,
-  Button,
-  DialogContent,
-  Dialog,
-  Slider,
-} from '@material-ui/core';
-import { NavLink } from 'react-router-dom';
+
 import { styled } from '@mui/material/styles';
 import {
   CardHeader,
@@ -26,12 +12,13 @@ import {
   Card,
   Typography,
   IconButton,
+  Button,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import UpdatePetPopup from './UpdatePetPopup';
 import AppContext from '../context/AppContext';
 import axios from 'axios';
+import { createAxiosHeaderGetReq } from '../lib/CreateAxiosReq';
 const url = 'http://localhost:8000/user';
 
 export default function Pet(props) {
@@ -48,7 +35,7 @@ export default function Pet(props) {
     breed,
     bio,
   } = props.pet;
-  const { currentUser } = useContext(AppContext);
+  const { currentUser, token } = useContext(AppContext);
   const [expanded, setExpanded] = React.useState(false);
   const [openPopup, setOpenPopup] = useState(false);
 
@@ -72,9 +59,10 @@ export default function Pet(props) {
   };
   const handleSave = async () => {
     try {
-      const result = await axios.post(`${url}/${currentUser.id}/save`, {
-        id,
-      });
+      const result = await axios.post(
+        `${url}/${currentUser.id}/save`,
+        createAxiosHeaderGetReq(token, id)
+      );
       console.log(result.data);
     } catch (error) {
       console.log(error);
@@ -82,9 +70,10 @@ export default function Pet(props) {
   };
   const handleAdopt = async () => {
     try {
-      const result = await axios.post(`${url}/${currentUser.id}/adopt`, {
-        id,
-      });
+      const result = await axios.post(
+        `${url}/${currentUser.id}/adopt`,
+        createAxiosHeaderGetReq(token, id)
+      );
       console.log(result.data);
     } catch (error) {
       console.log(error);
@@ -92,9 +81,10 @@ export default function Pet(props) {
   };
   const handleFoster = async () => {
     try {
-      const result = await axios.post(`${url}/${currentUser.id}/foster`, {
-        id,
-      });
+      const result = await axios.post(
+        `${url}/${currentUser.id}/foster`,
+        createAxiosHeaderGetReq(token, id)
+      );
       console.log(result.data);
     } catch (error) {
       console.log(error);
@@ -110,12 +100,11 @@ export default function Pet(props) {
     <StyledDiv>
       <StyledCard>
         <CardHeader
-          gutterBottom
           variant='h5'
           component='div'
           title={name}
           subheader={type}
-        ></CardHeader>{' '}
+        ></CardHeader>
         <CardMedia
           component='img'
           height='140'
@@ -128,10 +117,10 @@ export default function Pet(props) {
         </CardContent>
         <CardActions disableSpacing>
           <StyledFooter>
-            {currentUser?.role == 'admin' && (
+            {currentUser?.role === 'admin' && (
               <UpdatePetPopup initialValues={props.pet} />
             )}
-            {currentUser && (
+            {currentUser?.role == 'user' && (
               <>
                 <Button size='small' onClick={handleSave}>
                   save

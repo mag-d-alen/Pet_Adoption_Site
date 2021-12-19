@@ -13,7 +13,6 @@ import {
   Button,
   IconButton,
   DialogContent,
-  Link,
 } from '@mui/material';
 import styled from '@emotion/styled';
 import { Menu, Home } from '@mui/icons-material';
@@ -22,21 +21,21 @@ import LogIn from './LogIn';
 import AppContext from '../context/AppContext';
 import Sidebar from './Sidebar';
 
-import Drawer from '@mui/material/Drawer';
+// import Drawer from '@mui/material/Drawer';
 
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+// import List from '@mui/material/List';
+// import Divider from '@mui/material/Divider';
+// import ListItem from '@mui/material/ListItem';
+// import ListItemIcon from '@mui/material/ListItemIcon';
+// import ListItemText from '@mui/material/ListItemText';
+// import InboxIcon from '@mui/icons-material/MoveToInbox';
+// import MailIcon from '@mui/icons-material/Mail';
 
 export default function Navbar() {
-  const { isLoggedIn, setOpenSidebar, openSidebar, currentUser } =
-    useContext(AppContext);
+  const { isLoggedIn, currentUser } = useContext(AppContext);
   const [open, setOpen] = React.useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [openSidebar, setOpenSidebar] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -56,8 +55,8 @@ export default function Navbar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <StyledAppBar position='static'>
+    <Box>
+      <StyledAppBar onClick={handleOpenSidebar}>
         <Toolbar>
           <IconButton
             size='large'
@@ -68,7 +67,7 @@ export default function Navbar() {
           >
             <Menu />
           </IconButton>
-
+          {openSidebar && <Sidebar handleOpenSidebar={handleOpenSidebar} />}
           {!isLoggedIn && (
             <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
               <Dialog
@@ -109,6 +108,8 @@ export default function Navbar() {
 }
 
 const StyledAppBar = styled(AppBar)`
+  position: 'relative';
+  z-index: 1;
   background-color: #c4966a;
   color: rgb(255, 243, 230);
 `;
