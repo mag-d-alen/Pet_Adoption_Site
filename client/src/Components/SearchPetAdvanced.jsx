@@ -24,7 +24,7 @@ export default function SearchPetAdvanced(props) {
   const [minWeight, setMinWeight] = useState('0');
   const [maxHeight, setMaxHeight] = useState('160');
   const [minHeight, setMinHeight] = useState('0');
-  const { token } = useContext(AppContext);
+
   const { handleSetPetList } = props;
   const adoptionStatusOptions = ['adopted', 'available', 'fostered'];
   const typeOptions = ['cat', 'dog', 'turtle', 'piglet', 'snake', 'chinchilla'];
@@ -53,11 +53,9 @@ export default function SearchPetAdvanced(props) {
         delete searchedPets[key];
       }
     }
-    const petListData = await axios.get(
-      `${url}/pet/search`,
-      createAxiosHeaderGetReq(token, searchedPets)
-    );
-    console.log(petListData.data, handleSetPetList);
+    const petListData = await axios.get(`${url}/pet/search`, {
+      params: searchedPets,
+    });
     handleSetPetList(petListData.data);
   };
   const handleAdoptionStatusChange = (event) => {

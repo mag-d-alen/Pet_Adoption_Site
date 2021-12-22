@@ -2,14 +2,7 @@
 
 import React, { useState, useContext } from 'react';
 import AppContext from '../context/AppContext';
-import {
-  Grid,
-  Paper,
-  TextField,
-  Button,
-  Typography,
-  Box,
-} from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 import { Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import styled from '@emotion/styled';
@@ -19,8 +12,7 @@ import axios from 'axios';
 const url = 'http://localhost:8000';
 
 export default function LogIn(props) {
-  const { setIsLoggedIn, setCurrentUser, currentUser, token, setToken } =
-    useContext(AppContext);
+  const { setIsLoggedIn, setCurrentUser } = useContext(AppContext);
   const [notification, setNotification] = useState(false);
   const initialValues = {
     email: '',
@@ -36,7 +28,7 @@ export default function LogIn(props) {
       const result = await axios.post(`${url}/login`, values);
       if (result.status === 200) {
         setCurrentUser(result.data.user);
-        setToken(result.data.token);
+        localStorage.setItem('token', result.data.token);
         setIsLoggedIn(true);
       }
       props.resetForm();

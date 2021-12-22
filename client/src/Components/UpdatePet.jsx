@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import moduleName from '../context/AppContext';
+import AppContext from '../context/AppContext';
 import PetForm from './PetForm';
 import { Grid, Header } from '@material-ui/core';
 import styled from '@emotion/styled';
@@ -13,12 +13,13 @@ const url = 'http://localhost:8000/pet';
 export default function UpdatePet(props) {
   const [confirmation, setConfirmation] = useState('');
   const { initialValues, id } = props;
-  const handleSubmit = async (values, actions) => {
-    console.log('values', values);
+  const { token } = useContext(AppContext);
+
+  const handleSubmit = async (values) => {
     const newPet = values;
     console.log('newPet', newPet);
     try {
-      const result = await axios.put(`${url}/${id}`, newPet);
+      const result = await axios.put(`${url}/${id}`, { token, newPet });
       setConfirmation(result.data);
     } catch (error) {
       console.log(error);

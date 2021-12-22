@@ -17,26 +17,27 @@ import { createAxiosHeaderGetReq } from '../lib/CreateAxiosReq';
 const url = 'http://localhost:8000';
 
 export default function SearchPet(props) {
-  const [searchedPetType, setSearchedPetType] = useState('');
-  const { token } = useContext(AppContext);
+  // const [searchedPetType, setSearchedPetType] = useState('');
+  const [searchedPetObject, setSearchedPetObject] = useState({
+    maxWeight: '20',
+    minWeight: '0',
+    maxHeight: '160',
+    minHeight: '0',
+  });
+
   const typeOptions = ['cat', 'dog', 'turtle', 'piglet', 'snake', 'chinchilla'];
   const { handleSetPetList } = props;
-  const handleChange = (e) => {
-    setSearchedPetType(e.target.value);
-  };
-  const handleFindPets = async (props) => {
-    const searchedPets = {
-      type: searchedPetType,
-      maxWeight: '20',
-      minWeight: '0',
-      maxHeight: '160',
-      minHeight: '0',
-    };
 
-    const petListData = await axios.get(
-      `${url}/pet/search`,
-      createAxiosHeaderGetReq(token, searchedPets)
-    );
+  const handleChange = (e) => {
+    setSearchedPetObject((prevValue) => ({
+      ...prevValue,
+      type: e.target.value,
+    }));
+  };
+  const handleFindPets = async () => {
+    const petListData = await axios.get(`${url}/pet/search`, {
+      params: searchedPetObject,
+    });
     handleSetPetList(petListData.data);
   };
 

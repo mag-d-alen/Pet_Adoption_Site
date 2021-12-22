@@ -8,33 +8,15 @@ import PetList from './PetList';
 import Search from './Search';
 
 import styled from '@emotion/styled';
-// import { InputLabel } from '@mui/material';
-
-// import Box from '@mui/material/Box';
-// import Drawer from '@mui/material/Drawer';
-// import Button from '@mui/material/Button';
-// import List from '@mui/material/List';
-// import Divider from '@mui/material/Divider';
-// import ListItem from '@mui/material/ListItem';
-// import ListItemIcon from '@mui/material/ListItemIcon';
-// import ListItemText from '@mui/material/ListItemText';
-// import InboxIcon from '@mui/icons-material/MoveToInbox';
-// import MailIcon from '@mui/icons-material/Mail';
 
 export default function Home() {
-  const { openSidebar, setOpenSidebar } = useContext(AppContext);
-  const [openSearch, setOpenSearch] = React.useState(false);
-  const handleToggleOpenSearch = () => {
-    setOpenSearch(!openSearch);
-    setOpenSidebar(!openSidebar);
-  };
-  return (
-    <div>
-      {/* {openSidebar && (
-        <Sidebar handleToggleOpenSearch={handleToggleOpenSearch} />
-      )} */}
-    </div>
-  );
+  // const { openSidebar, setOpenSidebar } = useContext(AppContext);
+  // const [openSearch, setOpenSearch] = React.useState(false);
+  // const handleToggleOpenSearch = () => {
+  //   setOpenSearch(!openSearch);
+  //   setOpenSidebar(!openSidebar);
+  // };
+  return <div></div>;
 }
 const StyledButton = styled('button')`
   margin: auto;

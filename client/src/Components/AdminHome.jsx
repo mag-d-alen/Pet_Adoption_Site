@@ -1,16 +1,13 @@
 /** @format */
 
-import React, { useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router';
-import { Grid, FormControl, Button } from '@material-ui/core';
+import React, { useState, useContext } from 'react';
+import AppContext from '../context/AppContext';
+import { Grid, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import axios from 'axios';
 import PetList from './PetList';
 import UserList from './UserList';
-import AppContext from '../context/AppContext';
-import CreatePet from './CreatePet';
-import { createAxiosHeaderGetReq } from '../lib/CreateAxiosReq';
 
 // import { Link } from 'react-router-dom';
 
@@ -28,10 +25,7 @@ export default function AdminHome() {
     } else {
       setShowUsers([]);
       try {
-        const pets = await axios.get(
-          `${url}/pet`,
-          createAxiosHeaderGetReq(token)
-        );
+        const pets = await axios.get(`${url}/pet`, { params: token });
         setPetList(pets.data);
         setShowPets(true);
       } catch (error) {
@@ -46,10 +40,7 @@ export default function AdminHome() {
     } else {
       try {
         setShowPets(false);
-        const users = await axios.get(
-          `${url}/user`,
-          createAxiosHeaderGetReq(token)
-        );
+        const users = await axios.get(`${url}/user`, { params: token });
         setShowUsers(users.data);
       } catch (error) {
         console.log(error);

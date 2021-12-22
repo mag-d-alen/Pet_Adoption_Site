@@ -1,8 +1,8 @@
 /** @format */
 
 import React, { useState, useEffect, useContext } from 'react';
-
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import {
   CardHeader,
   CardMedia,
@@ -18,16 +18,18 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import UpdatePetPopup from './UpdatePetPopup';
 import AppContext from '../context/AppContext';
 import axios from 'axios';
-import { createAxiosHeaderGetReq } from '../lib/CreateAxiosReq';
-const url = 'http://localhost:8000/user';
+const url = 'http://localhost:8000';
 
 export default function Pet(props) {
+  const { currentUser, token } = useContext(AppContext);
+  const [expanded, setExpanded] = React.useState(false);
+  const navigate = useNavigate();
   const {
     name,
     type,
     adoptionStatus,
     hypoallergenic,
-    id,
+    _id,
     color,
     weight,
     height,
@@ -35,9 +37,6 @@ export default function Pet(props) {
     breed,
     bio,
   } = props.pet;
-  const { currentUser, token } = useContext(AppContext);
-  const [expanded, setExpanded] = React.useState(false);
-  const [openPopup, setOpenPopup] = useState(false);
 
   const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -57,70 +56,75 @@ export default function Pet(props) {
   const handleRemovePet = () => {
     console.log('remove');
   };
+
   const handleSave = async () => {
     try {
-      const result = await axios.post(
-        `${url}/${currentUser.id}/save`,
-        createAxiosHeaderGetReq(token, id)
-      );
+      const result = await axios.post(`${url}/user/${currentUser._id}/save`, {
+        token,
+        _id,
+      });
       console.log(result.data);
     } catch (error) {
       console.log(error);
     }
   };
+
   const handleAdopt = async () => {
     try {
-      const result = await axios.post(
-        `${url}/${currentUser.id}/adopt`,
-        createAxiosHeaderGetReq(token, id)
-      );
+      const result = await axios.post(`${url}/user/${currentUser._id}/adopt`, {
+        token,
+        _id,
+      });
       console.log(result.data);
     } catch (error) {
       console.log(error);
     }
   };
   const handleFoster = async () => {
+    // console.log;
+    //check the pet status. if !available check userid if userId = currentuser_id return button
+    //
+    //
     try {
-      const result = await axios.post(
-        `${url}/${currentUser.id}/foster`,
-        createAxiosHeaderGetReq(token, id)
-      );
+      const result = await axios.post(`${url}/user/${currentUser._id}/foster`, {
+        token,
+        _id,
+      });
       console.log(result.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleBackdropClick = (event) => {
-    event.stopPropagation();
-    return false;
+  const handleRouteChange = () => {
+    navigate(`./${_id}`);
+    // history.push(path);
   };
 
   return (
     <StyledDiv>
-      <StyledCard>
+      <StyledCard onClick={handleRouteChange}>
         <CardHeader
           variant='h5'
           component='div'
           title={name}
           subheader={type}
         ></CardHeader>
+
         <CardMedia
           component='img'
           height='140'
           image={picture}
+          src={picture}
           alt='profile picture'
         />
-        <CardContent>
-          <Typography>Breed: {breed}</Typography>
-          <Typography>Color: {color} </Typography>
-        </CardContent>
+
         <CardActions disableSpacing>
           <StyledFooter>
             {currentUser?.role === 'admin' && (
               <UpdatePetPopup initialValues={props.pet} />
             )}
-            {currentUser?.role == 'user' && (
+            {currentUser?.role === 'user' && (
               <>
                 <Button size='small' onClick={handleSave}>
                   save
@@ -142,10 +146,17 @@ export default function Pet(props) {
               <ExpandMoreIcon />
             </ExpandMore>
             <Collapse in={expanded} timeout='auto' unmountOnExit>
-              <Typography>Weight: {weight} kg</Typography>
-              <Typography>Height: {height} cm</Typography>
-              <Typography>{!hypoallergenic && 'Not'} hypoallergenic</Typography>
-              <Typography body>{bio}</Typography>
+              <CardContent>
+                <Typography>Adoption status: {adoptionStatus}</Typography>
+                <Typography>Breed: {breed}</Typography>
+                <Typography>Color: {color} </Typography>
+                <Typography>Weight: {weight} kg</Typography>
+                <Typography>Height: {height} cm</Typography>
+                <Typography>
+                  {!hypoallergenic && 'Not'} hypoallergenic
+                </Typography>
+                <Typography body>{bio}</Typography>{' '}
+              </CardContent>
             </Collapse>
           </StyledFooter>
         </CardActions>

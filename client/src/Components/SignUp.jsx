@@ -8,7 +8,6 @@ import styled from '@emotion/styled';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
-import { v4 as uuidv4 } from 'uuid';
 
 const url = 'http://localhost:8000';
 
@@ -54,7 +53,7 @@ export default function SignUp(props) {
       const newUser = {
         ...values,
         role: 'user',
-        id: uuidv4(),
+        // id: uuidv4(),
       };
 
       const result = await axios.post(`${url}/signup`, newUser);

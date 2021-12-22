@@ -21,26 +21,19 @@ import LogIn from './LogIn';
 import AppContext from '../context/AppContext';
 import Sidebar from './Sidebar';
 
-// import Drawer from '@mui/material/Drawer';
-
-// import List from '@mui/material/List';
-// import Divider from '@mui/material/Divider';
-// import ListItem from '@mui/material/ListItem';
-// import ListItemIcon from '@mui/material/ListItemIcon';
-// import ListItemText from '@mui/material/ListItemText';
-// import InboxIcon from '@mui/icons-material/MoveToInbox';
-// import MailIcon from '@mui/icons-material/Mail';
-
 export default function Navbar() {
-  const { isLoggedIn, currentUser } = useContext(AppContext);
+  const { isLoggedIn, setIsLoggedIn, currentUser } = useContext(AppContext);
   const [open, setOpen] = React.useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
 
-  const handleOpen = () => {
+  const handleOpen = (event) => {
+    console.log('handle open ');
+    event.stopPropagation();
+
     setOpen(true);
   };
-  const handleClose = () => {
+  const handleClose = (event) => {
     setOpen(false);
   };
   const handleBackdropClick = (event) => {
@@ -50,8 +43,15 @@ export default function Navbar() {
   const handleSetIsRegistered = (value) => {
     setIsRegistered(value);
   };
-  const handleOpenSidebar = () => {
+  const handleOpenSidebar = (event) => {
+    console.log('handle open sidebar');
+    event.stopPropagation();
     setOpenSidebar(!openSidebar);
+  };
+  const handleLogout = (event) => {
+    event.stopPropagation();
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
   };
 
   return (
@@ -67,7 +67,7 @@ export default function Navbar() {
           >
             <Menu />
           </IconButton>
-          {openSidebar && <Sidebar handleOpenSidebar={handleOpenSidebar} />}
+          {openSidebar && <Sidebar />}
           {!isLoggedIn && (
             <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
               <Dialog
@@ -93,9 +93,14 @@ export default function Navbar() {
             </Typography>
           )}
           {isLoggedIn ? (
-            <StyledDiv>
-              Welcome {currentUser.firstName} {currentUser.lastName}!
-            </StyledDiv>
+            <>
+              <StyledDiv>
+                Welcome {currentUser.firstName} {currentUser.lastName}!
+              </StyledDiv>
+              <Button color='inherit' onClick={handleLogout}>
+                Logout
+              </Button>
+            </>
           ) : (
             <Button color='inherit' onClick={handleOpen}>
               Login
