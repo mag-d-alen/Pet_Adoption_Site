@@ -20,29 +20,35 @@ db.once('open', function () {
   console.log('Connection Successful!');
 });
 
-router.post('/', async (req, res) => {
+//add new pet
+
+router.post('/', authenticate, async (req, res) => {
   const pet = new Pet({
-    id: req.body.id,
-    type: req.body.type,
-    name: req.body.name,
-    adoptionStatus: req.body.adoptionStatus,
-    picture: req.body.picture,
-    height: req.body.height,
-    weight: req.body.weight,
-    color: req.body.color,
-    bio: req.body.bio,
-    hypoallergenic: req.body.hypoallergenic,
-    dietaryRestrictions: req.body.dietaryRestrictions,
-    breed: req.body.breed,
+    type: req.body.newPet.type,
+    name: req.body.newPet.name,
+    adoptionStatus: req.body.newPet.adoptionStatus,
+    picture: req.body.newPet.picture,
+    height: req.body.newPet.height,
+    weight: req.body.newPet.weight,
+    color: req.body.newPet.color,
+    bio: req.body.newPet.bio,
+    hypoallergenic: req.body.newPet.hypoallergenic,
+    dietaryRestrictions: req.body.newPet.dietaryRestrictions,
+    breed: req.body.newPet.breed,
+    owner: req.body.newPet.owner,
   });
   try {
-    const petAlreadyExist = await Pet.findOne({ id: req.body.id });
-    pet
-      .save()
-      .then((pet) => {
-        res.status(200).json(`new pet: ${pet.name} was created`);
-      })
-      .catch((error) => res.status(500).json({ error }));
+    const petAlreadyExists = await Pet.findOne({ name: req.body.newPet.name });
+    if (petAlreadyExists) {
+      return res.status(400).send('Pet of this name already exists');
+    } else {
+      pet
+        .save()
+        .then((pet) => {
+          res.status(200).json(`New pet: ${pet.name} was created`);
+        })
+        .catch((error) => res.status(500).json({ error }));
+    }
   } catch (error) {
     console.log(error);
     res.status(400).json({ error });
@@ -50,28 +56,31 @@ router.post('/', async (req, res) => {
 });
 
 //protected route for editing pets info
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticate, async (req, res) => {
   try {
-    const updated = { ...req.body, id: req.params.id };
+    const updated = req.body.newPet;
+    console.log('updated: ', updated);
     const petToUpdate = await Pet.findOneAndUpdate(
-      { id: req.params.id },
+      { _id: req.params.id },
       updated
     );
+    console.log('updated:', updated, req.params.id);
     petToUpdate
       .save()
       .then((pet) => {
         res.status(200).json(`${pet.name} info updated`);
       })
-      .catch((error) => res.status(500).json({ error }));
+      .catch((error) => res.status(500).json(error));
   } catch (error) {
-    res.status(500).json({ error });
+    res.status(500).json(error);
   }
 });
 
-router.get('/search', authenticate, async (req, res) => {
+//search  pets
+
+router.get('/search', async (req, res) => {
   const { maxWeight, minWeight, maxHeight, minHeight, ...searchedPets } =
     req.query;
-
   try {
     const petArray = await Pet.find(searchedPets)
       .where('weight')
@@ -80,19 +89,15 @@ router.get('/search', authenticate, async (req, res) => {
       .where('height')
       .gte(minHeight)
       .lte(maxHeight);
-    console.log('PetArray: ', petArray.length);
-    if (petArray.length < 1) {
-      res.send('no pets');
-      return;
-    }
-    res.send(petArray);
+
+    return res.send(petArray);
   } catch (error) {
     res.status(500).send(error);
   }
 });
 
-//get all
-router.get('/', async (req, res) => {
+//get all pets
+router.get('/', authenticate, async (req, res) => {
   try {
     const petArray = await Pet.find();
     res.send(petArray);
@@ -105,10 +110,9 @@ router.get('/', async (req, res) => {
 //get pet by id
 router.get('/:id', async (req, res) => {
   try {
-    const petFound = await Pet.findOne({ id: req.params.id });
+    const petFound = await Pet.findOne({ _id: req.params.id });
     if (!petFound) res.status(400).json('Pet not found');
     else {
-      console.log(petFound);
       res.send(petFound);
     }
   } catch (error) {

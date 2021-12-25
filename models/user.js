@@ -17,13 +17,11 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   phoneNumber: { type: String, required: true },
   password: { type: String, required: true },
-  role: { type: String, required: true },
+  role: { type: String, default: 'user' },
   dateCreated: { type: Date, default: Date.now },
   savedPets: { type: Array, default: [] },
   fosteredPets: { type: Array, default: [] },
   adoptedPets: { type: Array, default: [] },
-  id: { type: String, required: true, unique: true },
-  token: { type: String },
 });
 
 const User = mongoose.model('User', UserSchema);

@@ -11,34 +11,27 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
+const ImageKit = require('imagekit');
 
 const { SECRET_KEY, DB_PASSWORD } = process.env;
 
 const { MongoClient } = require('mongodb');
 const url = `mongodb+srv://Mag:${DB_PASSWORD}@cluster0.norka.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const imagekit = new ImageKit({
+  urlEndpoint: 'https://ik.imagekit.io/idfq3nty6jr/',
+  publicKey: 'public_2jIz52z8w7n/jiO/gw6VCXTS/ic=',
+  privateKey: 'private_nhR3Eg+R0dvFVZvU1cL+Tt6ZQkY=',
+});
 
 //middleware
 app.use(cors());
 app.use(express.json());
 
-//create middleware to check token
-// function authRequest(req, res, next) {
-//   // User.find({token:req.body.token})
-//   next();
-//   return;
-// }
-
-// const jwt = require('jsonwebtoken');
-
-//User.findOne(token:r)
-// routes
 app.use('/pet', petRoutes);
 app.use('/user', userRoutes);
 
 app.post('/signup', async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, role, password, id } =
-    req.body;
-
+  const { firstName, lastName, email, phoneNumber, role, password } = req.body;
   try {
     const userAlreadyExist = await User.findOne({ email: email });
     if (!userAlreadyExist) {
@@ -49,9 +42,11 @@ app.post('/signup', async (req, res) => {
           lastName: lastName,
           email: email,
           phoneNumber: phoneNumber,
-          role: role,
           password: hashedPassword,
-          id: id,
+          role: undefined,
+          adoptedPets: undefined,
+          fosteredPets: undefined,
+          savedPets: undefined,
         });
         user.save().then((user) => {
           res.status(200).json(`new user: ${user.firstName} was created`);
@@ -84,10 +79,6 @@ app.post('/login', async (req, res) => {
               SECRET_KEY,
               { expiresIn: '1h' }
             );
-            await User.findOneAndUpdate(
-              { id: userTobeAuthorised.id },
-              { token: token }
-            );
 
             return res.status(200).json({
               message: 'Login successful',
@@ -107,6 +98,22 @@ app.post('/login', async (req, res) => {
     res.status(400).json(error);
   }
 });
+
+app.get(
+  '/auth',
+  function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept'
+    );
+    next();
+  },
+  (req, res) => {
+    const result = imagekit.getAuthenticationParameters();
+    res.send(result);
+  }
+);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

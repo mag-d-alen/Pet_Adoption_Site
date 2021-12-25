@@ -12,19 +12,19 @@ db.once('open', function () {
 });
 
 const PetSchema = new mongoose.Schema({
-  id: { type: String, unique: true, sparse: true, index: true, required: true },
   type: { type: String, required: true },
-  name: { type: String, trim: true },
+  name: { type: String, trim: true, unique: true, sparse: true },
   adoptionStatus: { type: String, required: true },
   picture: { type: String },
   color: { type: String, required: true },
-  bio: { type: String, required: true },
-  dietaryRestrictions: { type: String, required: true },
+  bio: { type: String },
+  dietaryRestrictions: { type: String },
   breed: { type: String, required: true },
   weight: { type: Number, required: true },
   height: { type: Number, required: true },
   hypoallergenic: { type: Boolean, required: true },
   dateCreated: { type: Date, default: Date.now },
+  owner: { type: String },
 });
 
 const Pet = mongoose.model('Pet', PetSchema);
