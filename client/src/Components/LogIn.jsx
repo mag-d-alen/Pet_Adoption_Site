@@ -47,7 +47,16 @@ export default function LogIn(props) {
 
   return (
     <StyledDiv>
-      {notification && <Alert severity='error'>Log in failed</Alert>}
+      {notification && (
+        <Alert
+          onClose={() => {
+            clearAlert();
+          }}
+          severity='error'
+        >
+          Log in failed
+        </Alert>
+      )}
       <StyledIcon
         onClick={props.handleClose}
         variant='contained'

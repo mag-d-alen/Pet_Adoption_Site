@@ -182,6 +182,6 @@ const StyledButton = styled('button')`
   text-transform: uppercase;
   background-color: #b58151;
   &:hover {
-    background-color: #3c2113;
+    background-color: #7a5d43c3;
   }
 `;

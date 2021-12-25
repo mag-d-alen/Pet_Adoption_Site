@@ -4,6 +4,7 @@
 // create theme context wrpa app in it -> no need for consumer
 //
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
   AppBar,
@@ -26,6 +27,7 @@ export default function Navbar() {
   const [open, setOpen] = React.useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const navigate = useNavigate();
 
   const handleOpen = (event) => {
     console.log('handle open ');
@@ -52,6 +54,7 @@ export default function Navbar() {
     event.stopPropagation();
     localStorage.removeItem('token');
     setIsLoggedIn(false);
+    navigate('./');
   };
 
   return (
@@ -97,14 +100,10 @@ export default function Navbar() {
               <StyledDiv>
                 Welcome {currentUser.firstName} {currentUser.lastName}!
               </StyledDiv>
-              <Button color='inherit' onClick={handleLogout}>
-                Logout
-              </Button>
+              <StyledButton onClick={handleLogout}>Logout</StyledButton>
             </>
           ) : (
-            <Button color='inherit' onClick={handleOpen}>
-              Login
-            </Button>
+            <StyledButton onClick={handleOpen}>Login</StyledButton>
           )}
         </Toolbar>
       </StyledAppBar>
@@ -114,10 +113,17 @@ export default function Navbar() {
 
 const StyledAppBar = styled(AppBar)`
   position: 'relative';
-  z-index: 1;
+
   background-color: #c4966a;
-  color: rgb(255, 243, 230);
+  color: rgb(255 243 230);
 `;
 const StyledDiv = styled('div')`
   margin-left: auto;
+`;
+const StyledButton = styled(Button)`
+  color: white;
+  margin: 0 1rem;
+  &:hover {
+    background-color: #7a5d43c3;
+  }
 `;

@@ -5,22 +5,29 @@ import styled from '@emotion/styled';
 import SearchPetAdvanced from './SearchPetAdvanced';
 import SearchPet from './SearchPet';
 import PetList from './PetList';
-import { Switch } from '@mui/material';
+import { Switch, Alert } from '@mui/material';
 
 export default function Search() {
   const [isToggled, setIsToggled] = useState(false);
   const [petList, setPetList] = useState([]);
+  const [alert, setAlert] = useState('');
 
   const handleToggle = () => {
     setIsToggled(!isToggled);
   };
   const handleSetPetList = (list) => {
-    setPetList(list);
+    console.log(list);
+    list.length < 1
+      ? setAlert('No Pets found, change the criteria and try again!')
+      : setPetList(list);
+    return;
   };
 
   const handleClearSearch = () => {
     setPetList([]);
+    setAlert('');
   };
+
   return (
     <div>
       <StyledDiv>
@@ -30,9 +37,12 @@ export default function Search() {
       <StyledButton onClick={handleClearSearch} disabled={petList.length < 1}>
         Clear search
       </StyledButton>
-      {petList.length > 0 ? (
-        <PetList petList={petList} />
-      ) : (
+      {alert && (
+        <Alert severity='error' onClose={() => setAlert('')}>
+          {alert}
+        </Alert>
+      )}
+      {petList.length < 1 ? (
         <>
           {isToggled ? (
             <SearchPet handleSetPetList={handleSetPetList} />
@@ -40,6 +50,8 @@ export default function Search() {
             <SearchPetAdvanced handleSetPetList={handleSetPetList} />
           )}
         </>
+      ) : (
+        <PetList petList={petList} />
       )}
     </div>
   );
@@ -63,7 +75,7 @@ const StyledButton = styled('button')`
   margin: 0.5rem auto;
   align-items: center;
   &:hover {
-    background-color: #3c2113;
+    background-color: #7a5d43c3;
   }
   &[disabled]:hover {
     background-color: #aaa8a8;

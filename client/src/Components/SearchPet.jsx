@@ -10,6 +10,7 @@ import {
   Select,
 } from '@material-ui/core';
 import { Pets as Icon } from '@mui/icons-material';
+
 import styled from '@emotion/styled';
 import axios from 'axios';
 import AppContext from '../context/AppContext';
@@ -17,14 +18,13 @@ import { createAxiosHeaderGetReq } from '../lib/CreateAxiosReq';
 const url = 'http://localhost:8000';
 
 export default function SearchPet(props) {
-  // const [searchedPetType, setSearchedPetType] = useState('');
   const [searchedPetObject, setSearchedPetObject] = useState({
     maxWeight: '20',
     minWeight: '0',
     maxHeight: '160',
     minHeight: '0',
   });
-
+  const [alert, setAlert] = useState('');
   const typeOptions = ['cat', 'dog', 'turtle', 'piglet', 'snake', 'chinchilla'];
   const { handleSetPetList } = props;
 
@@ -35,10 +35,18 @@ export default function SearchPet(props) {
     }));
   };
   const handleFindPets = async () => {
-    const petListData = await axios.get(`${url}/pet/search`, {
-      params: searchedPetObject,
-    });
-    handleSetPetList(petListData.data);
+    try {
+      const petListData = await axios.get(`${url}/pet/search`, {
+        params: searchedPetObject,
+      });
+      if (petListData.data.length < 0) {
+        return setAlert('Pets not found. Try again');
+      } else {
+        handleSetPetList(petListData.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -95,7 +103,7 @@ const StyledButton = styled('button')`
   display: flex;
   align-items: center;
   &:hover {
-    background-color: #3c2113;
+    background-color: #7a5d43c3;
   }
 `;
 const StyledSelect = styled(Select)`

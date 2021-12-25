@@ -1,21 +1,12 @@
 /** @format */
 
-import React from 'react';
-
-export default function Profile() {
-  return <div></div>;
-}
-
-
-
-
+import React, { useState } from 'react';
 
 // Form with the following fields: password, email, first name,
 // last name, phone number,user can add a short bio.
 
 /** @format */
 
-import React, { useState } from 'react';
 import {
   Grid,
   Box,
@@ -33,7 +24,7 @@ import styled from '@emotion/styled';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-export default function PetForm(props) {
+export default function Profile(props) {
   const { handleSubmit, initialValues, confirmation } = props;
   const [alertMessage, setAlertMessage] = useState('');
   const [isSubmitting, setSubmitting] = useState(false);
@@ -73,8 +64,6 @@ export default function PetForm(props) {
       .max(15)
       .required('Required'),
     bio: Yup.string().max(250).required('Required'),
-   
- 
   });
   const types = ['cat', 'dog', 'turtle', 'piglet', 'snake', 'chinchilla'];
   const adoptionStatuses = ['available', 'fostered', 'adopted'];
@@ -305,7 +294,7 @@ const StyledButton = styled('button')`
   font-size: 1.2rem;
   background-color: #b58151;
   &:hover {
-    background-color: #3c2113;
+    background-color: #7a5d43c3;
   }
 `;
 const StyledIcon = styled(Icon)`

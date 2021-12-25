@@ -38,6 +38,7 @@ export default function PetForm(props) {
       .max(15)
       .required('Required'),
     bio: Yup.string().max(250),
+    dietaryRestrictions: Yup.string().max(150),
     breed: Yup.string()
       .min(3, 'Please enter correct breed')
       .required('Required'),
@@ -185,7 +186,6 @@ export default function PetForm(props) {
               variant='filled'
               fullWidth
               name='dietaryRestrictions'
-              required
               id='dietaryRestrictions'
             />
             {errors.type && touched.type ? (
@@ -258,7 +258,7 @@ const StyledButton = styled('button')`
   font-size: 1.2rem;
   background-color: #b58151;
   &:hover {
-    background-color: #3c2113;
+    background-color: #7a5d43c3;
   }
 `;
 const StyledIcon = styled(Icon)`

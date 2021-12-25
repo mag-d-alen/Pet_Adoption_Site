@@ -13,9 +13,7 @@ const url = 'http://localhost:8000';
 
 export default function SignUp(props) {
   const [isSubmitting, setSubmitting] = useState(false);
-  const [alert, setAlert] = useState('');
-  const [alertMessage, setAlertMessage] = useState('');
-  const [notification, setNotification] = useState(false);
+  const [notification, setNotification] = useState('');
 
   const initialValues = {
     firstName: '',
@@ -50,14 +48,9 @@ export default function SignUp(props) {
 
   const handleSubmit = async (values, actions) => {
     try {
-      const newUser = {
-        ...values,
-        role: 'user',
-        // id: uuidv4(),
-      };
-
+      const newUser = values;
       const result = await axios.post(`${url}/signup`, newUser);
-      setNotification({ msg: result.data, type: 'success' });
+      setNotification(result.data);
       actions.setSubmitting(true);
       props.handleSetIsRegistered(true);
       setTimeout(() => {
@@ -66,20 +59,21 @@ export default function SignUp(props) {
       }, 2000);
     } catch (error) {
       console.log(error);
-      setNotification(true);
+      setNotification('Sign up failed');
     }
   };
 
   const handleSetIsRegistered = () => {
     props.handleSetIsRegistered(true);
   };
-  const clearAlert = () => {
-    setNotification((prevState) => ({ ...prevState, msg: '' }));
-  };
 
   return (
     <>
-      {notification && <Alert severity='error'>Sign up failed</Alert>}
+      {notification && (
+        <Alert onClose={() => setNotification('')} severity='error'>
+          {notification}
+        </Alert>
+      )}
       <StyledPaper>
         <StyledIcon
           onClick={props.handleClose}
@@ -101,7 +95,11 @@ export default function SignUp(props) {
           }}
         >
           {(props) => (
-            <StyledForm onKeyDown={clearAlert}>
+            <StyledForm
+              onKeyDown={() => {
+                setNotification('');
+              }}
+            >
               <Field
                 as={TextField}
                 fullWidth
@@ -246,7 +244,7 @@ const StyledButton = styled('button')`
   border-radius: 0.2rem;
   background-color: #aaa8a8;
   &:hover {
-    background-color: #44281a;
+    background-color: #7a5d43c3;
   }
 `;
 

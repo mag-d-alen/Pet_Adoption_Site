@@ -12,7 +12,6 @@ const url = 'http://localhost:8000';
 
 export default function CreatePet() {
   const { token } = useContext(AppContext);
-  const [alert, setAlert] = useState(false);
   const [confirmation, setConfirmation] = useState('');
 
   const handleSubmit = async (values, actions) => {

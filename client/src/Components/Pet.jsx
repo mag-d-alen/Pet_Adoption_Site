@@ -15,7 +15,7 @@ import {
   Button,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import UpdatePetPopup from './UpdatePetPopup';
+
 import AppContext from '../context/AppContext';
 import axios from 'axios';
 const url = 'http://localhost:8000';
@@ -49,56 +49,57 @@ export default function Pet(props) {
     }),
   }));
 
-  const handleExpandClick = () => {
+  const handleExpandClick = (e) => {
+    e.stopPropagation();
     setExpanded(!expanded);
   };
 
-  const handleRemovePet = () => {
-    console.log('remove');
-  };
+  // const handleRemovePet = () => {
+  //   console.log('remove');
+  // };
 
-  const handleSave = async () => {
-    try {
-      const result = await axios.post(`${url}/user/${currentUser._id}/save`, {
-        token,
-        _id,
-      });
-      console.log(result.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleSave = async (e) => {
+  //   e.stopPropagation();
+  //   try {
+  //     const result = await axios.post(`${url}/user/${currentUser._id}/save`, {
+  //       token,
+  //       _id,
+  //     });
+  //     console.log(result.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const handleAdopt = async () => {
-    try {
-      const result = await axios.post(`${url}/user/${currentUser._id}/adopt`, {
-        token,
-        _id,
-      });
-      console.log(result.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleFoster = async () => {
-    // console.log;
-    //check the pet status. if !available check userid if userId = currentuser_id return button
-    //
-    //
-    try {
-      const result = await axios.post(`${url}/user/${currentUser._id}/foster`, {
-        token,
-        _id,
-      });
-      console.log(result.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleAdopt = async () => {
+  //   try {
+  //     const result = await axios.post(`${url}/user/${currentUser._id}/adopt`, {
+  //       token,
+  //       _id,
+  //     });
+  //     console.log(result.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // const handleFoster = async () => {
+  //   // console.log;
+  //   //check the pet status. if !available check userid if userId = currentuser_id return button
+  //   //
+  //   //
+  //   try {
+  //     const result = await axios.post(`${url}/user/${currentUser._id}/foster`, {
+  //       token,
+  //       _id,
+  //     });
+  //     console.log(result.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleRouteChange = () => {
     navigate(`./${_id}`);
-    // history.push(path);
   };
 
   return (
@@ -121,22 +122,6 @@ export default function Pet(props) {
 
         <CardActions disableSpacing>
           <StyledFooter>
-            {currentUser?.role === 'admin' && (
-              <UpdatePetPopup initialValues={props.pet} />
-            )}
-            {currentUser?.role === 'user' && (
-              <>
-                <Button size='small' onClick={handleSave}>
-                  save
-                </Button>
-                <Button size='small' onClick={handleFoster}>
-                  foster
-                </Button>
-                <Button size='small' onClick={handleAdopt}>
-                  adopt
-                </Button>
-              </>
-            )}
             <ExpandMore
               expand={expanded}
               onClick={handleExpandClick}
@@ -155,7 +140,7 @@ export default function Pet(props) {
                 <Typography>
                   {!hypoallergenic && 'Not'} hypoallergenic
                 </Typography>
-                <Typography body>{bio}</Typography>{' '}
+                <Typography body>{bio}</Typography>
               </CardContent>
             </Collapse>
           </StyledFooter>
