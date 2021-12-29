@@ -12,7 +12,6 @@ import {
   Card,
   Typography,
   IconButton,
-  Button,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -53,50 +52,6 @@ export default function Pet(props) {
     e.stopPropagation();
     setExpanded(!expanded);
   };
-
-  // const handleRemovePet = () => {
-  //   console.log('remove');
-  // };
-
-  // const handleSave = async (e) => {
-  //   e.stopPropagation();
-  //   try {
-  //     const result = await axios.post(`${url}/user/${currentUser._id}/save`, {
-  //       token,
-  //       _id,
-  //     });
-  //     console.log(result.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const handleAdopt = async () => {
-  //   try {
-  //     const result = await axios.post(`${url}/user/${currentUser._id}/adopt`, {
-  //       token,
-  //       _id,
-  //     });
-  //     console.log(result.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // const handleFoster = async () => {
-  //   // console.log;
-  //   //check the pet status. if !available check userid if userId = currentuser_id return button
-  //   //
-  //   //
-  //   try {
-  //     const result = await axios.post(`${url}/user/${currentUser._id}/foster`, {
-  //       token,
-  //       _id,
-  //     });
-  //     console.log(result.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const handleRouteChange = () => {
     navigate(`./${_id}`);

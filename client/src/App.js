@@ -7,6 +7,8 @@ import Home from './Components/Home';
 import CreatePet from './Components/CreatePet';
 import PetPage from './Components/PetPage';
 import UpdatePet from './Components/UpdatePet';
+import AllUsers from './Components/AllUsers';
+import AllPets from './Components/AllPets';
 import AdminHome from './Components/AdminHome';
 import Search from './Components/Search';
 import MyPets from './Components/MyPets';
@@ -21,7 +23,6 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const token = localStorage.getItem('token');
   // useEffect(() => {
-  //   !token && setIsLoggedIn(false);
   // }, [token]);
 
   return (
@@ -42,20 +43,26 @@ function App() {
           <Route exact path='/' element={<Home />} />
           <Route path='/searchpet' element={<Search />} />
           <Route path='/searchpet/:id' element={<PetPage />} />
-          {token && (
-            <>
-              <Route path='/:id' element={<Profile />} />
-              <Route path='/myPets' element={<MyPets />} />
-              <Route path='/myPets/:id' element={<PetPage />} />
-            </>
-          )}
-          {token && currentUser?.role === 'admin' && (
-            <>
-              <Route exact path='/admin' element={<AdminHome />} />
-              <Route path='/admin/addPet' element={<CreatePet />} />
-              <Route path='/admin/:id' element={<PetPage />} />
-            </>
-          )}
+          <Route path='/:id' element={token ? <Profile /> : <Home />} />
+          <Route path='/mypets' element={token ? <MyPets /> : <Home />} />
+          <Route path='/mypets/:id' element={token ? <PetPage /> : <Home />} />
+          <Route
+            exact
+            path='/admin'
+            element={
+              token && currentUser?.role === 'admin' ? <AdminHome /> : <Home />
+            }
+          >
+            <Route path='addpet' element={<CreatePet />} />
+            <Route path='allusers' element={<AllUsers />} />
+            <Route path='allpets' element={<AllPets />} />
+          </Route>
+          <Route
+            path='/admin/allpets/:id'
+            element={
+              token && currentUser?.role === 'admin' ? <PetPage /> : <Home />
+            }
+          />
         </Routes>
       </BrowserRouter>
     </AppContext.Provider>

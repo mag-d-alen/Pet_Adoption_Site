@@ -72,10 +72,11 @@ export default function SearchPet(props) {
 const StyledIcon = styled(Icon)`
   margin: 0.3rem;
 `;
-const StyledPaper = styled(Paper)`
+const StyledPaper = styled('div')`
   width: 40rem;
   padding: 2rem;
   margin: auto;
+  background-color: #ffffffd5;
 `;
 
 const StyledInput = styled(Input)`
@@ -91,6 +92,7 @@ const StyledDiv = styled('div')`
 `;
 const StyledLabel = styled(InputLabel)`
   text-align: right;
+  color: white;
 `;
 const StyledButton = styled('button')`
   margin: auto;
@@ -99,7 +101,7 @@ const StyledButton = styled('button')`
   border-radius: 0.2rem;
   padding: 0.8rem 1rem;
   text-transform: uppercase;
-  background-color: #aaa8a8;
+  background-color: #7a5d437a;
   display: flex;
   align-items: center;
   &:hover {

@@ -2,7 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-import { Dialog, Grid, Typography, Button, DialogContent } from '@mui/material';
+import {
+  Modal,
+  Popover,
+  Grid,
+  Typography,
+  Button,
+  DialogContent,
+} from '@mui/material';
 import styled from '@emotion/styled';
 import UpdatePet from './UpdatePet';
 import axios from 'axios';
@@ -18,7 +25,7 @@ export default function UpdatePetPopup(props) {
     async function getInitialValues() {
       try {
         const result = await axios.get(`${url}/${id}`);
-        console.log(result.data);
+
         setInitialValues(result.data);
       } catch (error) {
         console.log(error);
@@ -41,16 +48,20 @@ export default function UpdatePetPopup(props) {
   return (
     <StyledGridItem>
       <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-        <Dialog
+        <StyledModal
           open={open}
           onClose={handleClose}
           onBackdropClick={handleBackdropClick}
           disableEscapeKeyDown
         >
-          <DialogContent>
-            <UpdatePet id={id} initialValues={initialValues} />
-          </DialogContent>
-        </Dialog>
+          {/* <DialogContent> */}
+          <UpdatePet
+            id={id}
+            initialValues={initialValues}
+            updatePet={props.updatePet}
+          />
+          {/* </DialogContent> */}
+        </StyledModal>
       </Typography>
 
       <StyledButton color='inherit' onClick={handleOpen} fullWidth>
@@ -60,8 +71,6 @@ export default function UpdatePetPopup(props) {
   );
 }
 
-//"& .MuiPaper-root" height:? width: 100%
-//& .MuiPaper-root-MuiDialog-paper
 const StyledButton = styled(Button)`
   margin: 0 1rem 0 2rem;
   width: 70%;
@@ -73,12 +82,20 @@ const StyledButton = styled(Button)`
   }
 `;
 const StyledGridItem = styled(Grid)`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 80%;
 `;
-
-//  root:{"& .muipaper-root-muidialog-paper: {
-//     width: 100%;
-//   }}
+const StyledModal = styled(Modal)`
+  position: absolute;
+  top: 10rem;
+  left: 10rem;
+  bottom: 10rem;
+  right: 10rem;
+  overflow: scroll;
+  height: 100vh;
+  display: block;
+`;

@@ -6,20 +6,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import AppContext from '../context/AppContext';
 import UpdatePetPopup from './UpdatePetPopup';
-import {
-  CardHeader,
-  CardMedia,
-  CardActions,
-  CardContent,
-  Collapse,
-  Card,
-  Typography,
-  IconButton,
-  Button,
-  Paper,
-  Alert,
-  Grid,
-} from '@mui/material';
+import { CardMedia, Typography, Button, Box, Alert, Grid } from '@mui/material';
 import styled from '@emotion/styled';
 const url = 'http://localhost:8000';
 
@@ -38,31 +25,42 @@ export default function PetPage() {
 
   useEffect(() => {
     async function fetchInfo() {
-      const result = await axios.get(`${url}/pet/${id}`);
-      setPet(result.data);
+      try {
+        const result = await axios.get(`${url}/pet/${id}`);
+        setPet(result.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
     fetchInfo();
   }, []);
 
+  useEffect(() => {
+    handleShowButtons();
+  }, [currentUser, pet]);
+
   const handleShowButtons = () => {
-    console.log(pet.adoptionStatus);
-    if (currentUser.savedPets.includes(pet._id)) {
-      console.log('yes, should be unsave');
+    if (currentUser.savedPets.includes(id)) {
       setShowButtons((prevState) => ({
         ...prevState,
         save: false,
       }));
-    }
-    if (pet.adoptionStatus === 'adopted') {
+    } else {
       setShowButtons((prevState) => ({
         ...prevState,
-        adopt: false,
-        foster: false,
+        save: true,
       }));
     }
     if (pet.adoptionStatus === 'fostered') {
-      setShowButtons((prevState) => ({ ...prevState, foster: false }));
+      setShowButtons((prevState) => ({
+        ...prevState,
+        return: false,
+        adopt: false,
+        foster: false,
+      }));
+
       if (pet.owner === currentUser._id) {
+        console.log(pet.owner);
         setShowButtons((prevState) => ({
           ...prevState,
           return: true,
@@ -71,6 +69,15 @@ export default function PetPage() {
         }));
       }
     }
+    if (pet.adoptionStatus === 'adopted') {
+      setShowButtons((prevState) => ({
+        ...prevState,
+        adopt: false,
+        foster: false,
+        return: false,
+      }));
+    }
+
     if (pet.adoptionStatus === 'available') {
       setShowButtons((prevState) => ({
         ...prevState,
@@ -82,25 +89,27 @@ export default function PetPage() {
   };
 
   const handleAction = async (actionType) => {
+    console.log(actionType);
     try {
       const result = await axios.post(
         `${url}/user/${currentUser._id}/${actionType}`,
-        {
-          token,
-          id,
-        }
+        { token, id },
+        { new: true }
       );
       setCurrentUser(result.data.user);
+      result.data.pet && setPet(result.data.pet);
       setConfirmation(result.data.msg);
-      handleShowButtons();
     } catch (error) {
       console.log(error);
     }
   };
+  const handleUpdatePet = (pet) => {
+    setPet(pet);
+  };
 
   return (
     <StyledGrid container>
-      <h1>{pet.name}</h1>{' '}
+      <h1>{pet.name}</h1>
       {confirmation && (
         <Alert
           onClose={() => {
@@ -112,10 +121,8 @@ export default function PetPage() {
         </Alert>
       )}
       <StyledPaper>
-        <Grid item xs={6}>
-          <StyledCardMedia component='img' image={pet.picture} />
-        </Grid>
-        <StyledGridItem item xs={3}>
+        <StyledCardMedia item xs={6} component='img' image={pet.picture} />
+        <StyledGridItem item xs={5}>
           <Typography paragraph>breed: {pet.breed}</Typography>
           <Typography paragraph>color: {pet.color}</Typography>
           <Typography paragraph>
@@ -128,20 +135,19 @@ export default function PetPage() {
           )}
           <Typography paragraph> weight: {pet.weight} kg</Typography>
           <Typography paragraph> height: {pet.height} cm</Typography>
-          {pet.bio && <Typography paragraph> biograhy: {pet.bio}</Typography>}
+          {pet.bio && <Typography paragraph> biography: {pet.bio}</Typography>}
           <Typography paragraph>
-            {!pet.hypoalergenic && 'non'} hypoalergenic
+            {!pet.hypoallergenic && 'non'} hypoallergenic
           </Typography>
         </StyledGridItem>
-        <StyledGridItem item xs={3}>
+        <ButtonsSection item xs={1}>
           {currentUser?.role === 'admin' && (
-            <UpdatePetPopup initialValues={pet} />
+            <UpdatePetPopup initialValues={pet} updatePet={handleUpdatePet} />
           )}
 
           {currentUser?.role === 'user' && (
             <>
               <StyledButton
-                size='small'
                 onClick={() => {
                   showButtons.save
                     ? handleAction('save')
@@ -162,7 +168,6 @@ export default function PetPage() {
               )}
               {showButtons.adopt && (
                 <StyledButton
-                  size='small'
                   onClick={() => {
                     handleAction('adopt');
                   }}
@@ -172,7 +177,6 @@ export default function PetPage() {
               )}
               {showButtons.return && (
                 <StyledButton
-                  size='small'
                   onClick={() => {
                     handleAction('return');
                   }}
@@ -182,42 +186,54 @@ export default function PetPage() {
               )}
             </>
           )}
-        </StyledGridItem>
+        </ButtonsSection>
       </StyledPaper>
     </StyledGrid>
   );
 }
 const StyledGrid = styled(Grid)`
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 10rem;
+  margin-top: 5rem;
   background-color: #c4966a63;
   text-transform: uppercase;
 `;
-const StyledPaper = styled(Paper)`
+const StyledPaper = styled(Box)`
+  margin-top: 2rem;
   width: 85%;
+  background-color: white;
   display: flex;
+  flex-wrap: wrap;
   padding: 1rem;
 `;
 const StyledCardMedia = styled(CardMedia)`
   height: 25rem;
   width: 25rem;
-  margin: 1rem;
+  margin: 0 1rem;
 `;
+
 const StyledGridItem = styled(Grid)`
+  margin: 0 1rem;
   display: flex;
+  flex-shrink: 1;
+  padding: 0.3rem;
   flex-direction: column;
   justify-content: center;
+  flex-wrap: wrap;
+`;
+
+const ButtonsSection = styled(Grid)`
+  margin: auto 1rem;
 `;
 const StyledButton = styled(Button)`
-  margin: 0 1rem 0 2rem;
-  width: 70%;
   font-size: 1.2rem;
-  color: #7a5d43;
+  width: min-content;
+  color: #7a5d43ca;
   &:hover {
-    background-color: #7a5d43c3;
+    background-color: #7a5d4396;
     color: white;
   }
 `;

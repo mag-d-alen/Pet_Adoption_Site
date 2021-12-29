@@ -17,10 +17,10 @@ export default function UpdatePet(props) {
 
   const handleSubmit = async (values) => {
     const newPet = values;
-    console.log('newPet', newPet);
     try {
       const result = await axios.put(`${url}/${id}`, { token, newPet });
-      setConfirmation(result.data);
+      setConfirmation(result.data.msg);
+      props.updatePet(result.data.pet);
     } catch (error) {
       console.log(error);
     }
@@ -28,10 +28,8 @@ export default function UpdatePet(props) {
 
   return (
     <Grid>
-      <StyledHeader>
-        Update Pet Info <StyledIcon />
-      </StyledHeader>
       <PetForm
+        overflow='scroll'
         handleSubmit={handleSubmit}
         initialValues={initialValues}
         confirmation={confirmation}
@@ -39,13 +37,3 @@ export default function UpdatePet(props) {
     </Grid>
   );
 }
-const StyledIcon = styled(Icon)`
-  padding: 0 0.7rem;
-  color: lightgray;
-`;
-const StyledHeader = styled('div')`
-  display: flex;
-  justify-content: center;
-  font-weight: 500;
-  text-transform: uppercase;
-`;

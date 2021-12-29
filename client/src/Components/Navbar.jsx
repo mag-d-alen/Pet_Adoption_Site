@@ -46,7 +46,6 @@ export default function Navbar() {
     setIsRegistered(value);
   };
   const handleOpenSidebar = (event) => {
-    console.log('handle open sidebar');
     event.stopPropagation();
     setOpenSidebar(!openSidebar);
   };
@@ -59,7 +58,7 @@ export default function Navbar() {
 
   return (
     <Box>
-      <StyledAppBar onClick={handleOpenSidebar}>
+      <StyledAppBar onClick={openSidebar ? handleOpenSidebar : undefined}>
         <Toolbar>
           <IconButton
             size='large'
@@ -75,7 +74,7 @@ export default function Navbar() {
             <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
               <Dialog
                 open={open}
-                onClose={handleClose}
+                //onClose={handleClose}
                 onBackdropClick={handleBackdropClick}
                 disableEscapeKeyDown
               >

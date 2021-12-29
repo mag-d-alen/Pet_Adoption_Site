@@ -2,16 +2,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  List,
-  Drawer,
-  ListItem,
-  Text,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
+import { List, Drawer, ListItem, ListItemIcon } from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
 import styled from '@emotion/styled';
 import AppContext from '../context/AppContext';
@@ -20,11 +11,9 @@ import SearchPet from './SearchPet';
 export default function Sidebar(props) {
   const [openSearch, setOpenSearch] = useState(false);
   const { currentUser } = React.useContext(AppContext);
-  const id = currentUser?.id;
 
   const handleToggleOpenSearch = () => {
     setOpenSearch(!openSearch);
-    // props.handleOpenSidebar();
   };
   return (
     <Drawer variant='permanent'>
@@ -36,15 +25,13 @@ export default function Sidebar(props) {
           <StyledLink to='/searchpet'>Search</StyledLink>
         </ListItem>
 
-        {currentUser && (
+        {currentUser?.role === 'user' && (
           <>
             <ListItem button key='Profile'>
               <ListItemIcon>
                 <MailIcon />
               </ListItemIcon>
-              <StyledLink to='/user/' params={{ id }}>
-                Profile
-              </StyledLink>
+              <StyledLink to='/profile'>Profile</StyledLink>
             </ListItem>
             <ListItem button key='Home'>
               <ListItemIcon>
@@ -52,17 +39,17 @@ export default function Sidebar(props) {
               </ListItemIcon>
               <StyledLink to='/myPets'>My Pets</StyledLink>
             </ListItem>
-            {openSearch && <SearchPet />}
-
-            {currentUser.role === 'admin' && (
-              <ListItem button key='admin'>
-                <ListItemIcon>
-                  <MailIcon />
-                </ListItemIcon>
-                <StyledLink to='/admin'>Admin</StyledLink>
-              </ListItem>
-            )}
           </>
+        )}
+        {openSearch && <SearchPet />}
+
+        {currentUser?.role === 'admin' && (
+          <ListItem button key='admin'>
+            <ListItemIcon>
+              <MailIcon />
+            </ListItemIcon>
+            <StyledLink to='/admin'>Admin</StyledLink>
+          </ListItem>
         )}
       </List>
     </Drawer>

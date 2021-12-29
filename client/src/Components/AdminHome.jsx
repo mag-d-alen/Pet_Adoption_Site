@@ -1,61 +1,21 @@
 /** @format */
 
-import React, { useState, useContext } from 'react';
-import AppContext from '../context/AppContext';
-import { Grid, Button } from '@material-ui/core';
+import React from 'react';
+import { Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
-import axios from 'axios';
-import PetList from './PetList';
-import UserList from './UserList';
-
-// import { Link } from 'react-router-dom';
-
-const url = 'http://localhost:8000';
+import { Outlet } from 'react-router-dom';
 
 export default function AdminHome() {
-  const { token } = useContext(AppContext);
-  const [showPets, setShowPets] = useState(false);
-  const [showUsers, setShowUsers] = useState([]);
-  const [petList, setPetList] = useState([]);
-
-  const showAllPets = async () => {
-    if (showPets) {
-      return setShowPets(false);
-    } else {
-      setShowUsers([]);
-      try {
-        const pets = await axios.get(`${url}/pet`, { params: token });
-        setPetList(pets.data);
-        setShowPets(true);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
-  const showAllUsers = async () => {
-    if (showUsers.length) {
-      return setShowUsers([]);
-    } else {
-      try {
-        setShowPets(false);
-        const users = await axios.get(`${url}/user`, { params: token });
-        setShowUsers(users.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
   return (
     <Grid align='center'>
       <h1>The home of every Admin</h1>
-      <Button onClick={showAllPets}>Show all pets</Button>
-      <Button onClick={showAllUsers}>Show all users</Button>
-      <StyledLink to='./addPet'>Add Pet</StyledLink>
-      {showPets && <PetList petList={petList} />}
-      {showUsers && <UserList userList={showUsers} />}
+
+      <StyledLink to='./allusers'>Show All Users</StyledLink>
+      <StyledLink to='./allpets'>Show All Pets</StyledLink>
+      <StyledLink to='./addpet'>Add Pet</StyledLink>
+
+      <Outlet />
     </Grid>
   );
 }
@@ -63,15 +23,18 @@ const StyledLink = styled(Link)`
   text-transform: uppercase;
   text-decoration: none;
   font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.87);
   line-height: 1.75;
   padding: 6px 16px;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  color: #7a5d43;
+  border-radius: 3px;
+
   &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.87);
+    background-color: #7a5d4360;
+    color: white;
   }
   &:visited {
-    color: rgba(0, 0, 0, 0.87);
+    color: #7a5d43;
   }
 `;

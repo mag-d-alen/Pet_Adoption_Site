@@ -58,9 +58,9 @@ export default function PetForm(props) {
   const adoptionStatuses = ['available', 'fostered', 'adopted'];
   return (
     <StyledPaper>
-      <Grid align='center'>
+      {/* <Grid align='center'>
         <h2>Please fill this form to add or update new pet data.</h2>
-      </Grid>
+      </Grid> */}
       <Formik
         enableReinitialize
         validationSchema={validationSchema}
@@ -94,6 +94,7 @@ export default function PetForm(props) {
             {errors.type && touched.type ? (
               <StyledErrorMessage name='type'>{errors.type}</StyledErrorMessage>
             ) : null}
+            <ProfileImg name='picture' />
             <Field
               as={TextField}
               variant='filled'
@@ -193,7 +194,6 @@ export default function PetForm(props) {
                 {errors.type}
               </StyledErrorMessage>
             ) : null}
-            <ProfileImg name='picture' />
             <InputLabel id='bio'>A short pet bio</InputLabel>
             <Field
               variant='filled'
@@ -231,19 +231,26 @@ export default function PetForm(props) {
   );
 }
 
-const StyledPaper = styled(Paper)`
+const StyledPaper = styled('div')`
+  background-color: #fffffff0;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
   padding: 1rem;
-  width: 40rem;
-  margin: 10rem auto auto auto;
+  margin: auto;
+  text-transform: uppercase;
 `;
+
 const StyledHeader = styled('h1')`
   margin: 0 auto;
 `;
 const StyledForm = styled(Form)`
-  padding: 0.5rem;
+  padding: 0.3rem;
   & > * {
-    margin-bottom: 8px;
+    margin: 3px 0;
   }
+  overflow: ;
 `;
 const StyledButton = styled('button')`
   margin: 1rem 0;

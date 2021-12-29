@@ -27,7 +27,7 @@ export default function CreatePet() {
   };
 
   return (
-    <Grid>
+    <StyledGrid>
       <StyledHeader>
         Add New Pet
         <StyledIcon />
@@ -49,13 +49,20 @@ export default function CreatePet() {
         }}
         confirmation={confirmation}
       />
-    </Grid>
+    </StyledGrid>
   );
 }
+const StyledGrid = styled(Grid)`
+  width: 60rem;
+  // margin: 10rem auto;
+`;
+
 const StyledIcon = styled(Icon)`
   padding: 0 0.7rem;
   color: lightgray;
 `;
-const StyledHeader = styled('h1')`
-  margin: 0 auto;
+const StyledHeader = styled('h2')`
+  color: #7a5d43a0;
+  margin: 2rem auto;
+  text-transform: uppercase;
 `;

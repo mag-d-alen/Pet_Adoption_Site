@@ -4,9 +4,8 @@ import React, { useContext, useState } from 'react';
 import PetList from './PetList';
 import axios from 'axios';
 import AppContext from '../context/AppContext';
-import { Button, Paper } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import styled from '@emotion/styled';
-import cors from 'cors';
 const url = 'http://localhost:8000';
 
 export default function MyPets() {
@@ -35,7 +34,7 @@ export default function MyPets() {
   };
 
   return (
-    <StyledPaper>
+    <StyledGrid>
       <StyledDiv>
         <StyledButton onClick={() => showPets('saved')}>
           Show my Saved Pets
@@ -48,21 +47,19 @@ export default function MyPets() {
         </StyledButton>
       </StyledDiv>
       <PetList petList={petList} />
-    </StyledPaper>
+    </StyledGrid>
   );
 }
-const StyledPaper = styled(Paper)`
-  background-color: #c4966a63;
+const StyledGrid = styled(Grid)`
   padding: 1rem;
-  margin: 10rem auto;
+  margin: 5rem auto;
 `;
 const StyledButton = styled(Button)`
   font-weight: 500;
-  font-size: 1.2rem;
   margin-bottom: 2rem;
   color: #7a5d43;
   &:hover {
-    background-color: #7a5d43c3;
+    background-color: #7a5d4360;
     color: white;
   }
 `;

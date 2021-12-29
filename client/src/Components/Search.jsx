@@ -16,7 +16,6 @@ export default function Search() {
     setIsToggled(!isToggled);
   };
   const handleSetPetList = (list) => {
-    console.log(list);
     list.length < 1
       ? setAlert('No Pets found, change the criteria and try again!')
       : setPetList(list);
@@ -27,6 +26,7 @@ export default function Search() {
     setPetList([]);
     setAlert('');
   };
+  const handleFormClear = () => {};
 
   return (
     <div>
@@ -35,8 +35,9 @@ export default function Search() {
         <Switch onChange={handleToggle}>Toggle</Switch> <p>Simple Search</p>{' '}
       </StyledDiv>
       <StyledButton onClick={handleClearSearch} disabled={petList.length < 1}>
-        Clear search
+        Clear results
       </StyledButton>
+
       {alert && (
         <Alert severity='error' onClose={() => setAlert('')}>
           {alert}
@@ -57,8 +58,8 @@ export default function Search() {
   );
 }
 const StyledDiv = styled('div')`
-  padding-top: 10%;
-  /* width: 100%; */
+  padding-top: 5rem;
+  text-transform: uppercase;
   display: flex;
   justify-content: center;
   align-items: center;

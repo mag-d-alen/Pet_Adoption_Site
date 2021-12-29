@@ -13,7 +13,6 @@ import { Input, InputAdornment } from '@mui/material';
 import styled from '@emotion/styled';
 import axios from 'axios';
 import AppContext from '../context/AppContext';
-import { createAxiosHeaderGetReq } from '../lib/CreateAxiosReq';
 const url = 'http://localhost:8000';
 
 export default function SearchPetAdvanced(props) {
@@ -53,10 +52,14 @@ export default function SearchPetAdvanced(props) {
         delete searchedPets[key];
       }
     }
-    const petListData = await axios.get(`${url}/pet/search`, {
-      params: searchedPets,
-    });
-    handleSetPetList(petListData.data);
+    try {
+      const petListData = await axios.get(`${url}/pet/search`, {
+        params: searchedPets,
+      });
+      handleSetPetList(petListData.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleAdoptionStatusChange = (event) => {
     event.preventDefault();
@@ -149,7 +152,7 @@ const StyledGrid = styled(Grid)`
   width: 40rem;
   padding: 2rem;
   margin: auto;
-  background-color: #dbccc0;
+  background-color: #ffffffd5;
 `;
 const StyledSelect = styled(Select)`
   width: 60%;
@@ -167,7 +170,6 @@ const StyledDiv = styled('div')`
   padding: 0.5rem;
   margin: 1rem;
   text-transform: uppercase;
-  background-color: #dbccc0;
 `;
 const StyledLabel = styled(InputLabel)`
   text-align: right;
