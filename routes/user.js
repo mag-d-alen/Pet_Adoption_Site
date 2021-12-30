@@ -11,20 +11,36 @@ app.use(express.json());
 
 const User = require('../models/User');
 const Pet = require('../models/Pet');
+const bcrypt = require('bcrypt');
 
 //protected route for editing user settings
-// router.put('/:id', authenticate, (req, res) => {
-//   res.send('data updated');
-// });
 
-// router.get('/:userId', authenticate, (req, res) => {
+// router.put('/', authenticate, async (req, res) => {
 //   try {
-//     const userId = req.query;
-
-//     res.setHeader('content-type', 'aplication/json');
-//     //  res.send(JSON.stringify(user));
+//     const data = req.body.newUser;
+//     const hashedPassword = await bcrypt.hash(data.password, 10);
+//     const user = {
+//       firstName: data.firstName,
+//       lastName: data.lastName,
+//       email: data.email,
+//       phoneNumber: data.phoneNumber,
+//       password: hashedPassword,
+//       bio: data.bio,
+//     };
+//     const updatedUser = await User.findOneAndUpdate(
+//       { _id: req.body.id },
+//       user,
+//       {
+//         new: true,
+//       }
+//     );
+//     updatedUser.save();
+//     res.status(200).send({
+//       msg: 'Your data was successfully updated',
+//       updatedUser: updatedUser,
+//     });
 //   } catch (error) {
-//     res.status(500).json(error.message);
+//     console.log(error);
 //   }
 // });
 
@@ -32,16 +48,6 @@ const Pet = require('../models/Pet');
 
 // router.get('/:id/full', (req, res) => {
 //   res.send(req.params.id);
-// });
-
-// router.get('/', authenticate, async (req, res) => {
-//   try {
-//     const users = await User.find();
-//     res.status(200).json(users);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json(error.message);
-//   }
 // });
 
 //saving a pet
@@ -60,108 +66,164 @@ const Pet = require('../models/Pet');
 //   }
 // });
 
-router.post('/:id/save', authenticate, async (req, res) => {
-  try {
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      { $push: { savedPets: req.body.id } }
-    );
+// router.get('/', authenticate, async (req, res) => {
+//   try {
+//     const users = await User.find();
+//     res.status(200).json(users);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json(error.message);
+//   }
+// });
 
-    updatedUser.save().then((user) => {
-      res.status(200).send({
-        user: updatedUser,
-        msg: `You saved me for later :)`,
-      });
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
+// router.post('/:id/save', authenticate, async (req, res) => {
+//   try {
+//     const updatedUser = await User.findOneAndUpdate(
+//       { _id: req.params.id },
+//       { $push: { savedPets: req.body.id } },
+//       { new: true }
+//     );
 
-//fostering a pet
-router.post('/:id/foster', authenticate, async (req, res) => {
-  try {
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      { $push: { fosteredPets: req.body.id } }
-    );
-    updatedUser.save();
-    const updatedPet = await Pet.findOneAndUpdate(
-      { _id: req.body.id },
-      { owner: req.params.id, adoptionStatus: 'fostered' }
-    );
-    updatedPet.save().then((pet) => {
-      res.status(200).send({
-        user: updatedUser,
-        msg: `${pet.name} is now fostered by ${updatedUser.firstName}!`,
-      });
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
+//     updatedUser.save().then((user) => {
+//       res.status(200).send({
+//         user: updatedUser,
+//         msg: `You saved me for later :)`,
+//       });
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
-//adopting a pet
-router.post('/:id/adopt', authenticate, async (req, res) => {
-  try {
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      { $push: { adoptedPets: req.body.id } }
-    );
-    updatedUser.save();
-    const updatedPet = await Pet.findOneAndUpdate(
-      { _id: req.body.id },
-      { owner: req.params.id, adoptionStatus: 'adopted' }
-    );
-    updatedPet.save().then((pet) => {
-      res.status(200).send({
-        user: updatedUser,
-        msg: `${pet.name} has been adopted by ${updatedUser.firstName}!`,
-      });
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
+// //fostering a pet// this will be in user controlers
+// router.post('/:id/foster', authenticate, async (req, res) => {
+//   const petId = req.body.id;
+//   const userId = req.params.id;
+//   try {
+//     const alreadyFostered = await User.findOne({
+//       _id: userId,
+//       fosteredPets: { $in: [petId] },
+//     });
 
-router.post('/:id/return', authenticate, async (req, res) => {
-  try {
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      { $pull: { fosteredPets: req.body.id } }
-    );
-    updatedUser.save();
-    const updatedPet = await Pet.findOneAndUpdate(
-      { _id: req.body.id },
-      { owner: '', adoptionStatus: 'available' }
-    );
-    updatedPet.save().then((pet) => {
-      res.status(200).send({
-        user: updatedUser,
-        msg: ` ${updatedUser.firstName} has returned ${pet.name}`,
-      });
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
+//     if (alreadyFostered) {
+//       return res
+//         .status(400)
+//         .send({ msg: 'You are alerady fostering this pet' });
+//     }
+//     const updatedUser = await User.findOneAndUpdate(
+//       { _id: userId },
+//       { $push: { fosteredPets: petId } },
+//       { new: true }
+//     );
+//     updatedUser.save();
+//     const updatedPet = await Pet.findOneAndUpdate(
+//       { _id: petId },
+//       { owner: userId, adoptionStatus: 'fostered' },
+//       { new: true }
+//     );
+//     updatedPet.save().then((pet) => {
+//       res.status(200).send({
+//         user: updatedUser,
+//         pet: updatedPet,
+//         msg: `${pet.name} is now fostered by ${updatedUser.firstName}!`,
+//       });
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return;
+//   }
+// });
 
-router.post('/:id/unsave', authenticate, async (req, res) => {
-  try {
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: req.params.id },
-      { $pull: { savedPets: req.body.id } }
-    );
-    updatedUser.save().then((pet) => {
-      res.status(200).send({
-        user: updatedUser,
-        msg: ` hi, ${updatedUser.firstName}  you removed me from your saved pets`,
-      });
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
+// //adopting a pet
+// router.post('/:id/adopt', authenticate, async (req, res) => {
+//   const petId = req.body.id;
+//   const userId = req.params.id;
+//   try {
+//     const alreadyAdopted = await User.findOne({
+//       _id: userId,
+//       AdoptedPets: { $in: [petId] },
+//     });
+
+//     if (alreadyAdopted) {
+//       return res
+//         .status(400)
+//         .send({ msg: 'You are alerady fostering this pet' });
+//     }
+//     const updatedUser = await User.findOneAndUpdate(
+//       { _id: userId },
+//       { $push: { adoptedPets: petId } },
+//       { new: true }
+//     );
+//     updatedUser.save();
+//     const updatedPet = await Pet.findOneAndUpdate(
+//       { _id: petId },
+//       { owner: userId, adoptionStatus: 'adopted' }
+//     );
+//     updatedPet.save().then((pet) => {
+//       res.status(200).send({
+//         user: updatedUser,
+//         pet: updatedPet,
+//         msg: `${pet.name} has been adopted by ${updatedUser.firstName}!`,
+//       });
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+
+// router.post('/:id/return', authenticate, async (req, res) => {
+//   const petId = req.body.id;
+//   const userId = req.params.id;
+//   try {
+//     const notFostered = await User.findOne({
+//       _id: userId,
+//       fosteredPets: { $nin: [petId] },
+//     });
+
+//     if (notFostered) {
+//       return res.status(400).send({ msg: 'You are not fostering this pet' });
+//     }
+//     const updatedUser = await User.findOneAndUpdate(
+//       { _id: userId },
+//       { $pull: { fosteredPets: petId } },
+//       { new: true }
+//     );
+//     updatedUser.save();
+//     const updatedPet = await Pet.findOneAndUpdate(
+//       { _id: petId },
+//       { owner: '', adoptionStatus: 'available' },
+//       { new: true }
+//     );
+//     updatedPet.save().then((pet) => {
+//       res.status(200).send({
+//         user: updatedUser,
+//         pet: updatedPet,
+//         msg: ` ${updatedUser.firstName} has returned ${pet.name}`,
+//       });
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+
+// router.post('/:id/unsave', authenticate, async (req, res) => {
+//   try {
+//     const updatedUser = await User.findOneAndUpdate(
+//       { _id: req.params.id },
+//       { $pull: { savedPets: req.body.id } },
+//       { new: true }
+//     );
+
+//     updatedUser.save().then((pet) => {
+//       res.status(200).send({
+//         user: updatedUser,
+//         msg: ` hi, ${updatedUser.firstName}  you removed me from your saved pets`,
+//       });
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
 //displaying if pet is saved
 router.get('/:id/saved', authenticate, async (req, res) => {
@@ -183,14 +245,14 @@ router.get('/:id/adopted', authenticate, async (req, res) => {
   }
 });
 
-//displaying if pet is fostered
+//displaying  fostered  pets of a given user
 
 router.get('/:id/fostered', authenticate, async (req, res) => {
   try {
     const data = await User.find({ _id: req.params.id });
-    res.send(data[0].fosteredPets);
+    return res.send(data[0].fosteredPets);
   } catch (error) {
-    console.log(error);
+    return res.status(500).send(error);
   }
 });
 

@@ -1,15 +1,7 @@
 /** @format */
-const { SECRET_KEY, DB_PASSWORD } = process.env;
-const mongoose = require('mongoose');
-const { MongoClient } = require('mongodb');
-const url = `mongodb+srv://Mag:${DB_PASSWORD}@cluster0.norka.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
-mongoose.connect(url);
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  console.log('Connection Successful!');
-});
+const mongoose = require('mongoose');
+const db = require('../db/db.js');
 
 const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
