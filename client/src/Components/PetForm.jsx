@@ -4,12 +4,8 @@ import React, { useState } from 'react';
 import ProfileImg from './ProfileImg';
 
 import {
-  Grid,
   Box,
-  Paper,
-  Typography,
   TextField,
-  Button,
   InputLabel,
   MenuItem,
   Select,
@@ -57,7 +53,7 @@ export default function PetForm(props) {
   const types = ['cat', 'dog', 'turtle', 'piglet', 'snake', 'chinchilla'];
   const adoptionStatuses = ['available', 'fostered', 'adopted'];
   return (
-    <StyledPaper>
+    <StyledNewDiv>
       {/* <Grid align='center'>
         <h2>Please fill this form to add or update new pet data.</h2>
       </Grid> */}
@@ -227,11 +223,11 @@ export default function PetForm(props) {
           </StyledForm>
         )}
       </Formik>
-    </StyledPaper>
+    </StyledNewDiv>
   );
 }
 
-const StyledPaper = styled('div')`
+const StyledNewDiv = styled('div')`
   background-color: #fffffff0;
   display: flex;
   flex-direction: column;
@@ -242,13 +238,10 @@ const StyledPaper = styled('div')`
   text-transform: uppercase;
 `;
 
-const StyledHeader = styled('h1')`
-  margin: 0 auto;
-`;
 const StyledForm = styled(Form)`
   padding: 0.3rem;
   & > * {
-    margin: 3px 0;
+    margin: 3px;
   }
   overflow: ;
 `;

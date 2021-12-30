@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import {
+  Dialog,
   Modal,
   Popover,
   Grid,
@@ -72,8 +73,7 @@ export default function UpdatePetPopup(props) {
 }
 
 const StyledButton = styled(Button)`
-  margin: 0 1rem 0 2rem;
-  width: 70%;
+  width: min-content;
   font-size: 1.2rem;
   color: #7a5d43;
   &:hover {
@@ -87,15 +87,18 @@ const StyledGridItem = styled(Grid)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 80%;
+  height: 50%;
 `;
-const StyledModal = styled(Modal)`
+const StyledModal = styled(Dialog)`
   position: absolute;
   top: 10rem;
-  left: 10rem;
-  bottom: 10rem;
-  right: 10rem;
-  overflow: scroll;
-  height: 100vh;
+  left: 8rem;
+  margin-bottom: 10rem;
+  right: 8rem;
+  height: 80vh;
+  bottom: 50rem;
   display: block;
+  & > * {
+    margin: 5px;
+  }
 `;

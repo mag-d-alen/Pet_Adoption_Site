@@ -25,7 +25,7 @@ export default function LogIn(props) {
 
   const onSubmit = async (values, props) => {
     try {
-      const result = await axios.post(`${url}/login`, values);
+      const result = await axios.post(`${url}/auth/login`, values);
       if (result.status === 200) {
         setCurrentUser(result.data.user);
         localStorage.setItem('token', result.data.token);

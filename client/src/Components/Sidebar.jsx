@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { List, Drawer, ListItem, ListItemIcon } from '@mui/material';
-import MailIcon from '@mui/icons-material/Mail';
 import styled from '@emotion/styled';
 import AppContext from '../context/AppContext';
+import { Pets as Icon } from '@mui/icons-material';
 import SearchPet from './SearchPet';
 
 export default function Sidebar(props) {
@@ -16,11 +16,11 @@ export default function Sidebar(props) {
     setOpenSearch(!openSearch);
   };
   return (
-    <Drawer variant='permanent'>
+    <StyledDrawer variant='permanent'>
       <List>
         <ListItem button onClick={handleToggleOpenSearch}>
           <ListItemIcon>
-            <MailIcon />
+            <Icon />
           </ListItemIcon>
           <StyledLink to='/searchpet'>Search</StyledLink>
         </ListItem>
@@ -29,13 +29,13 @@ export default function Sidebar(props) {
           <>
             <ListItem button key='Profile'>
               <ListItemIcon>
-                <MailIcon />
+                <Icon />
               </ListItemIcon>
               <StyledLink to='/profile'>Profile</StyledLink>
             </ListItem>
             <ListItem button key='Home'>
               <ListItemIcon>
-                <MailIcon />
+                <Icon />
               </ListItemIcon>
               <StyledLink to='/myPets'>My Pets</StyledLink>
             </ListItem>
@@ -46,25 +46,21 @@ export default function Sidebar(props) {
         {currentUser?.role === 'admin' && (
           <ListItem button key='admin'>
             <ListItemIcon>
-              <MailIcon />
+              <Icon />
             </ListItemIcon>
             <StyledLink to='/admin'>Admin</StyledLink>
           </ListItem>
         )}
       </List>
-    </Drawer>
+    </StyledDrawer>
   );
 }
-// const StyledBox = styled(Box)`
-//   display: flex;
-//   flex-direction: column;
-//   justify-items: center;
-//   width: 10rem;
-//   height: 100%;
-//   background-color: rgba(0, 0, 0, 0.07);
-//   margin: 10rem auto 0 0;
-// `;
 
+const StyledDrawer = styled(Drawer)`
+  & > * {
+    background-color: #c4966ab5;
+  }
+`;
 const StyledLink = styled(Link)`
   text-transform: uppercase;
   text-decoration: none;

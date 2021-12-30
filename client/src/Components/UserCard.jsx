@@ -11,6 +11,7 @@ import {
   Typography,
   IconButton,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AppContext from '../context/AppContext';
@@ -27,6 +28,7 @@ export default function UserCard(props) {
     adoptedPets,
     role,
     _id,
+    bio,
   } = props.user;
   const { token } = useContext(AppContext);
   const [expanded, setExpanded] = React.useState(false);
@@ -35,10 +37,11 @@ export default function UserCard(props) {
 
   useEffect(() => {
     findPetsProfiles();
-    //return setFosteredPetsNames([]);
   }, []);
 
   const findPetsProfiles = async () => {
+    setAdoptedPetsNames([]);
+    setFosteredPetsNames([]);
     try {
       const fosteredPets = await axios.get(`${url}/user/${_id}/fostered`, {
         params: token,
@@ -47,7 +50,9 @@ export default function UserCard(props) {
       fosteredPets.data.map(async (pet) => {
         await axios
           .get(`${url}/pet/${pet}/name`, { params: token })
-          .then((data) => setFosteredPetsNames([data.data.name]));
+          .then((pet) => {
+            setFosteredPetsNames((prevState) => [...prevState, pet.data]);
+          });
       });
 
       const adoptedPets = await axios.get(`${url}/user/${_id}/adopted`, {
@@ -57,18 +62,10 @@ export default function UserCard(props) {
       adoptedPets.data.map(async (pet) => {
         await axios
           .get(`${url}/pet/${pet}/name`, { params: token })
-          .then((data) => setAdoptedPetsNames([data.data.name]));
+          .then((pet) => {
+            setAdoptedPetsNames((prevState) => [...prevState, pet.data]);
+          });
       });
-
-      // const petname = petIds.map(async (petId) => {
-      //   petNameArray.push(
-      //     await axios.get(`${url}/pet/${petId}/name`, { params: token })
-      //   );
-      // });
-      // setFosteredPetsNames(petNameArray);
-      //const adoptedPets = await axios.get(`${url}/user/${id}/adopted`, { params: token })
-
-      //     );
 
       if (!fosteredPets) {
         console.log('No fostered pets');
@@ -119,15 +116,33 @@ export default function UserCard(props) {
           </ExpandMore>
           <Collapse in={expanded} timeout='auto' unmountOnExit>
             <CardContent>
-              <Typography>
-                {adoptedPets.length > 0
-                  ? `adopted pets:  ${adoptedPetsNames}`
-                  : `No adopted pets`}
+              <Typography paragraph>
+                {bio ? `bio: ${bio}` : 'no bio yet'}
               </Typography>
-              <Typography>
-                {fosteredPets.length > 0
-                  ? `pets fostered ${fosteredPetsNames}`
-                  : `No pets fostered`}
+              <Typography paragraph>
+                {adoptedPets.length > 0 ? (
+                  <>
+                    adopted pets :{' '}
+                    {adoptedPetsNames.map((name) => {
+                      return <li key={name}>{name}</li>;
+                    })}
+                  </>
+                ) : (
+                  'No adopted pets'
+                )}
+              </Typography>
+              <Typography paragraph>
+                {fosteredPets.length > 0 ? (
+                  <>
+                    pets fostered:{' '}
+                    {fosteredPetsNames.map((name) => {
+                      <Link to='./pet' />;
+                      return <li key={name}>{name}</li>;
+                    })}
+                  </>
+                ) : (
+                  `No pets fostered`
+                )}
               </Typography>
             </CardContent>
           </Collapse>

@@ -49,7 +49,7 @@ export default function SignUp(props) {
   const handleSubmit = async (values, actions) => {
     try {
       const newUser = values;
-      const result = await axios.post(`${url}/signup`, newUser);
+      const result = await axios.post(`${url}/auth/signup`, newUser);
       setNotification(result.data);
       actions.setSubmitting(true);
       props.handleSetIsRegistered(true);

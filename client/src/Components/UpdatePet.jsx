@@ -19,6 +19,7 @@ export default function UpdatePet(props) {
     const newPet = values;
     try {
       const result = await axios.put(`${url}/${id}`, { token, newPet });
+      console.log(result);
       setConfirmation(result.data.msg);
       props.updatePet(result.data.pet);
     } catch (error) {
