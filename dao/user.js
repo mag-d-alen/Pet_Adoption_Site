@@ -114,7 +114,6 @@ const returnPet = async (userId, petId) => {
 
 const adoptPet = async (userId, petId) => {
   try {
-    console.log('here');
     const alreadyAdopted = await User.findOne({
       _id: userId,
       adoptedPets: { $in: [petId] },

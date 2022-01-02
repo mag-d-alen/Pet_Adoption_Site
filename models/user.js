@@ -14,6 +14,7 @@ const UserSchema = new mongoose.Schema({
   savedPets: { type: Array, default: [] },
   fosteredPets: { type: Array, default: [] },
   adoptedPets: { type: Array, default: [] },
+  bio: { type: String, default: '' },
 });
 
 const User = mongoose.model('User', UserSchema);

@@ -34,6 +34,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/pet', petRoutes);
+
 app.use('/user', userRoutes);
 app.use('/auth', authRoutes);
 app.use('*', (req, res) => {
