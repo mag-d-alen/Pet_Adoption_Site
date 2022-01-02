@@ -13,7 +13,6 @@ export default function AllUsers() {
   const { token } = useContext(AppContext);
   const [showPets, setShowPets] = useState(false);
   const [showUsers, setShowUsers] = useState([]);
-  const [petList, setPetList] = useState([]);
 
   useEffect(() => {
     const showAllUsers = async () => {
@@ -38,35 +37,3 @@ export default function AllUsers() {
     </Grid>
   );
 }
-const StyledLink = styled(Link)`
-  text-transform: uppercase;
-  text-decoration: none;
-  font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.87);
-  line-height: 1.75;
-  padding: 6px 16px;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.87);
-  }
-  &:visited {
-    color: rgba(0, 0, 0, 0.87);
-  }
-`;
-const StyledButton = styled(Button)`
-  text-transform: uppercase;
-  text-decoration: none;
-  font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.87);
-  line-height: 1.75;
-  padding: 6px 16px;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.87);
-  }
-  &:visited {
-    color: rgba(0, 0, 0, 0.87);
-  }
-`;

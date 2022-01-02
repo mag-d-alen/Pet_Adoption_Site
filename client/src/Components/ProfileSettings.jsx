@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
 import AppContext from '../context/AppContext';
 import * as Yup from 'yup';
-import { Grid, Paper, Typography, TextField, Button } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 import { Alert } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 const url = 'http://localhost:8000';
@@ -23,7 +23,7 @@ export default function ProfileSettings(props) {
     phoneNumber: currentUser.phoneNumber,
     password: '',
     confirmPassword: '',
-    bio: '',
+    bio: currentUser.bio,
   };
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -190,7 +190,7 @@ export default function ProfileSettings(props) {
                   />
                 }
               />
-              {/* <InputLabel id='bio'>A short pet bio</InputLabel> */}
+
               <StyledField
                 placeholder='your short bio'
                 variant='filled'
@@ -267,10 +267,4 @@ const StyledErrorMessage = styled('span')`
   background-color: rgba(255, 0, 0, 0.6);
   padding: 0.5rem;
   border-radius: 0.2rem;
-`;
-const StyledIcon = styled(CloseIcon)`
-  margin-left: auto;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.08);
-  }
 `;

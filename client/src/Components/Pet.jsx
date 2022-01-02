@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -15,12 +15,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import AppContext from '../context/AppContext';
-import axios from 'axios';
-const url = 'http://localhost:8000';
-
 export default function Pet(props) {
-  const { currentUser, token } = useContext(AppContext);
   const [expanded, setExpanded] = React.useState(false);
   const navigate = useNavigate();
   const {
@@ -124,16 +119,4 @@ const StyledFooter = styled('footer')`
   display: flex;
   justify-items: center;
   flex-direction: column;
-`;
-const StyledCardMedia = styled(CardMedia)`
-  height: 10rem;
-  border: 1px solid brown;
-`;
-
-const StyledContentDiv = styled('div')`
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
-  jusify-items: center;
-  align-items: center;
 `;

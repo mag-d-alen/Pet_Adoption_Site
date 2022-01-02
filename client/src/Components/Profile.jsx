@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import ProfileSettings from './ProfileSettings';
 import AppContext from '../context/AppContext';
 import styled from '@emotion/styled';
-import { Box, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 
 export default function Profile() {
   const { currentUser, token } = useContext(AppContext);
@@ -21,8 +21,10 @@ const StyledDiv = styled(Box)`
   align-items: center;
   text-transform: uppercase;
   margin: 5rem;
+  font-family: 'Lato';
 `;
 const StyledTypography = styled('h2')`
   color: #7a5d43a0;
   margin: 0 auto 2rem auto;
+  font-family: 'Lato';
 `;

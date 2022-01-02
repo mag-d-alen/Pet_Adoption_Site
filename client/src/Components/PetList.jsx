@@ -1,20 +1,8 @@
 /** @format */
 
-import React, { useContext } from 'react';
-import {
-  Paper,
-  MenuItem,
-  TextField,
-  Grid,
-  Box,
-  Select,
-  InputLabel,
-  FormControl,
-  Button,
-  Slider,
-} from '@material-ui/core';
+import React from 'react';
+import { Grid } from '@material-ui/core';
 import styled from '@emotion/styled';
-import AppContext from '../context/AppContext';
 import Pet from './Pet';
 
 export default function PetList(props) {

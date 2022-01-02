@@ -73,6 +73,7 @@ export default function UpdatePetPopup(props) {
 }
 
 const StyledButton = styled(Button)`
+  margin-left: 5rem;
   width: min-content;
   font-size: 1.2rem;
   color: #7a5d43;

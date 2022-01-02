@@ -1,12 +1,10 @@
 /** @format */
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import AppContext from '../context/AppContext';
 import PetForm from './PetForm';
-import { Grid, Header } from '@material-ui/core';
-import styled from '@emotion/styled';
-import { Pets as Icon } from '@mui/icons-material';
+import { Grid } from '@material-ui/core';
 import axios from 'axios';
 const url = 'http://localhost:8000/pet';
 
@@ -19,7 +17,6 @@ export default function UpdatePet(props) {
     const newPet = values;
     try {
       const result = await axios.put(`${url}/${id}`, { token, newPet });
-      console.log(result);
       setConfirmation(result.data.msg);
       props.updatePet(result.data.pet);
     } catch (error) {

@@ -18,28 +18,32 @@ export default function Sidebar(props) {
   return (
     <StyledDrawer variant='permanent'>
       <List>
+        <ListItem button key='home'>
+          <ListItemIcon>
+            <Icon />
+          </ListItemIcon>
+          <StyledLink to='/'>Home</StyledLink>
+        </ListItem>
+
         <ListItem button onClick={handleToggleOpenSearch}>
           <ListItemIcon>
             <Icon />
           </ListItemIcon>
           <StyledLink to='/searchpet'>Search</StyledLink>
         </ListItem>
-
+        <ListItem button key='Profile'>
+          <ListItemIcon>
+            <Icon />
+          </ListItemIcon>
+          <StyledLink to='/profile'>Profile</StyledLink>
+        </ListItem>
         {currentUser?.role === 'user' && (
-          <>
-            <ListItem button key='Profile'>
-              <ListItemIcon>
-                <Icon />
-              </ListItemIcon>
-              <StyledLink to='/profile'>Profile</StyledLink>
-            </ListItem>
-            <ListItem button key='Home'>
-              <ListItemIcon>
-                <Icon />
-              </ListItemIcon>
-              <StyledLink to='/myPets'>My Pets</StyledLink>
-            </ListItem>
-          </>
+          <ListItem button key='mypets'>
+            <ListItemIcon>
+              <Icon />
+            </ListItemIcon>
+            <StyledLink to='/mypets'>My Pets</StyledLink>
+          </ListItem>
         )}
         {openSearch && <SearchPet />}
 
@@ -57,7 +61,7 @@ export default function Sidebar(props) {
 }
 
 const StyledDrawer = styled(Drawer)`
-  & > * {
+  /* & > * { */
     background-color: #c4966ab5;
   }
 `;

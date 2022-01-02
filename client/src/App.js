@@ -1,18 +1,18 @@
 /** @format */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar';
-import Profile from './Components/Profile';
+// import Profile from './Components/Profile';
 import Home from './Components/Home';
 import CreatePet from './Components/CreatePet';
 import PetPage from './Components/PetPage';
-import UpdatePet from './Components/UpdatePet';
 import AllUsers from './Components/AllUsers';
 import AllPets from './Components/AllPets';
 import AdminHome from './Components/AdminHome';
 import Search from './Components/Search';
 import MyPets from './Components/MyPets';
 import AppContext from './context/AppContext';
+import Profile from './Components/Profile';
 import './App.css';
 
 require('dotenv').config();
@@ -43,9 +43,11 @@ function App() {
           <Route exact path='/' element={<Home />} />
           <Route path='/searchpet' element={<Search />} />
           <Route path='/searchpet/:id' element={<PetPage />} />
-          <Route path='/:id' element={token ? <Profile /> : <Home />} />
+          {/* <Route path='/:id' element={token ? <Profile /> : <Home />} /> */}
           <Route path='/mypets' element={token ? <MyPets /> : <Home />} />
           <Route path='/mypets/:id' element={token ? <PetPage /> : <Home />} />
+          <Route path='/profile' element={token ? <Profile /> : <Home />} />
+
           <Route
             exact
             path='/admin'
@@ -56,13 +58,8 @@ function App() {
             <Route path='addpet' element={<CreatePet />} />
             <Route path='allusers' element={<AllUsers />} />
             <Route path='allpets' element={<AllPets />} />
+            <Route path='allpets/:id' element={<PetPage />} />
           </Route>
-          <Route
-            path='/admin/allpets/:id'
-            element={
-              token && currentUser?.role === 'admin' ? <PetPage /> : <Home />
-            }
-          />
         </Routes>
       </BrowserRouter>
     </AppContext.Provider>

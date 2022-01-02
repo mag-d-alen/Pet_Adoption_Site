@@ -54,7 +54,6 @@ export default function CreatePet() {
 }
 const StyledGrid = styled(Grid)`
   width: 60rem;
-  // margin: 10rem auto;
 `;
 
 const StyledIcon = styled(Icon)`

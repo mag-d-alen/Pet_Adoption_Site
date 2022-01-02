@@ -1,33 +1,69 @@
 /** @format */
 
-import React, { useContext, useState } from 'react';
-import AppContext from '../context/AppContext';
-
-import PetList from './PetList';
-// import Sidebar from './Sidebar';
-import Search from './Search';
-
+import React from 'react';
+import { Grid } from '@material-ui/core';
+import { Pets as Icon } from '@mui/icons-material';
 import styled from '@emotion/styled';
 
 export default function Home() {
-  // const { openSidebar, setOpenSidebar } = useContext(AppContext);
-  // const [openSearch, setOpenSearch] = React.useState(false);
-  // const handleToggleOpenSearch = () => {
-  //   setOpenSearch(!openSearch);
-  //   setOpenSidebar(!openSidebar);
-  // };
-  return <div></div>;
+  return (
+    <StyledDiv>
+      <StyledSubtitle>Welcome to</StyledSubtitle>
+      <StyledTitle>the Pet Shelter</StyledTitle> <StyledIcon />
+      <StyledPara>
+        {' '}
+        <p>Our pets: </p>{' '}
+        <p> cats, chinchillas, snakes, piglets, turtles, and dogs</p>
+        of all ages and sizes, pure breeds and mixed breeds, are waiting at our
+        shelter for you to take home, to foster or adopt them. Meet you new best
+        friend
+      </StyledPara>
+    </StyledDiv>
+  );
 }
-const StyledButton = styled('button')`
-  margin: auto;
-  border: none;
-  color: white;
-  border-radius: 0.2rem;
-  font-size: 1.2rem;
-  padding: 1rem 1.5rem;
+
+const StyledTitle = styled('h2')`
+  font-family: 'Lato';
+  font-weight: 600;
+  font-size: 3rem;
+  display: flex;
+  justify-content: center;
+  color: #44281a;
+`;
+const StyledSubtitle = styled('h4')`
+  font-family: 'Lato';
+  font-weight: 600;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  color: #44281a;
+  margin: 1rem;
+`;
+const StyledDiv = styled(Grid)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-transform: uppercase;
-  background-color: #b58151;
-  &:hover {
-    background-color: #3c2113;
-  }
+  padding-top: 1.5rem;
+  margin: 5rem auto 1rem auto;
+  background-color: #ffffff7a;
+  font-family: 'Lato';
+`;
+const StyledPara = styled(Grid)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  padding: 1.5rem;
+  margin: 3rem 0 0 0;
+  background-color: #ffffffa9;
+  padding: 1rem 15rem;
+  font-family: 'Lato';
+`;
+
+const StyledIcon = styled(Icon)`
+  color: #44281ab9;
+  font-size: 1.2rem;
 `;

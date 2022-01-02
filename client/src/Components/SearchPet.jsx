@@ -1,20 +1,11 @@
 /** @format */
 
-import React, { useState, useContext } from 'react';
-import {
-  Grid,
-  Paper,
-  InputLabel,
-  Input,
-  MenuItem,
-  Select,
-} from '@material-ui/core';
+import React, { useState } from 'react';
+import { InputLabel, MenuItem, Select } from '@material-ui/core';
 import { Pets as Icon } from '@mui/icons-material';
 
 import styled from '@emotion/styled';
 import axios from 'axios';
-import AppContext from '../context/AppContext';
-import { createAxiosHeaderGetReq } from '../lib/CreateAxiosReq';
 const url = 'http://localhost:8000';
 
 export default function SearchPet(props) {
@@ -79,9 +70,6 @@ const StyledPaper = styled('div')`
   background-color: #ffffffd5;
 `;
 
-const StyledInput = styled(Input)`
-  width: 60%;
-`;
 const StyledDiv = styled('div')`
   display: flex;
   justify-content: space-around;

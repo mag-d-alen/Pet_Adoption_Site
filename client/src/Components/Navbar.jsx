@@ -16,7 +16,7 @@ import {
   DialogContent,
 } from '@mui/material';
 import styled from '@emotion/styled';
-import { Menu, Home } from '@mui/icons-material';
+import { Menu } from '@mui/icons-material';
 import SignUp from './SignUp';
 import LogIn from './LogIn';
 import AppContext from '../context/AppContext';

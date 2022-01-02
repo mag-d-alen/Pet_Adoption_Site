@@ -2,8 +2,6 @@
 
 import React, { useEffect, useContext, useState } from 'react';
 import {
-  CardHeader,
-  CardMedia,
   CardActions,
   CardContent,
   Collapse,
@@ -158,7 +156,4 @@ const StyledCard = styled(Card)`
 `;
 const StyledFooter = styled('footer')`
   width: 100%;
-  display: flex;
-  justify-items: center;
-  flex-direction: column;
 `;

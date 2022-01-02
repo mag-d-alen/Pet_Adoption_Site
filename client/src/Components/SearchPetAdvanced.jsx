@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   MenuItem,
   TextField,
@@ -12,7 +12,6 @@ import { Input, InputAdornment } from '@mui/material';
 
 import styled from '@emotion/styled';
 import axios from 'axios';
-import AppContext from '../context/AppContext';
 const url = 'http://localhost:8000';
 
 export default function SearchPetAdvanced(props) {

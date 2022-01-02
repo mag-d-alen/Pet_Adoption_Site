@@ -63,6 +63,7 @@ const StyledDiv = styled('div')`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: 'Lato';
 `;
 const StyledButton = styled('button')`
   margin: auto;
