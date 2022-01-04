@@ -39,7 +39,6 @@ const editPetController = async (req, res) => {
     const updated = req.body.newPet;
     const id = req.params.id;
     const updatedPet = await editPet(updated, id);
-    console.log('Controller', updatedPet);
     return res.send({ msg: `${updated.name} info updated`, pet: updatedPet });
   } catch (error) {
     res.status(500).send(error);
@@ -65,7 +64,6 @@ const searchPetsController = async (req, res) => {
 
 const getAllPetsController = async (req, res) => {
   try {
-    console.log('here');
     const petArray = await getAllPets();
     return res.status(200).send(petArray);
   } catch (error) {

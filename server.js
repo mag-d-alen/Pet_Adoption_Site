@@ -9,6 +9,7 @@ const userRoutes = require('./routes/userRoute');
 const authRoutes = require('./routes/authRoute');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const { imageMiddleware } = require('./middleware');
 
 const User = require('./models/User');
 const ImageKit = require('imagekit');
@@ -32,33 +33,18 @@ const url = MONGO_URI;
 //middleware
 app.use(cors());
 app.use(express.json());
-
 app.use('/pet', petRoutes);
-
 app.use('/user', userRoutes);
 app.use('/auth', authRoutes);
 app.use('*', (req, res) => {
   res.status(404).send('Page not found');
 });
-
-app.get(
-  '/auth',
-  function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept'
-    );
-    next();
-  },
-  (req, res) => {
-    const result = imagekit.getAuthenticationParameters();
-    res.send(result);
-  }
-);
+app.get('/auth', imageMiddleware, (req, res) => {
+  const result = imagekit.getAuthenticationParameters();
+  res.send(result);
+});
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
-
 // module.exports = authRequest;

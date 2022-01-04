@@ -17,4 +17,13 @@ async function authenticate(req, res, next) {
   return next();
 }
 
-module.exports = authenticate;
+function imageMiddleware(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+}
+
+module.exports = { authenticate, imageMiddleware };

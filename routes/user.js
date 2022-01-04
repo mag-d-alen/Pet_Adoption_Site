@@ -5,7 +5,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const { SECRET_KEY, DB_PASSWORD } = process.env;
 const cors = require('cors');
-const authenticate = require('../middleware.js');
+const { authenticate } = require('../middleware.js');
 
 app.use(express.json());
 

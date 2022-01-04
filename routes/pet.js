@@ -3,22 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
-const authenticate = require('../middleware.js');
-
-//protected route for adding pets
-// const { MongoClient } = require('mongodb');
-// const Pet = require('../models/Pet');
-// const url = `mongodb+srv://Mag:${DB_PASSWORD}@cluster0.norka.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
-
-// router.use(express.json());
-// mongoose.connect(url);
-// const db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'connection error:'));
-// db.once('open', function () {
-//   console.log('Connection Successful!');
-// });
-
-//add new pet
+const { authenticate } = require('../middleware.js');
 
 router.post('/', authenticate, async (req, res) => {
   const pet = new Pet({

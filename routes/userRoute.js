@@ -1,6 +1,6 @@
 /** @format */
 
-const authenticate = require('../middleware.js');
+const { authenticate } = require('../middleware.js');
 const router = require('express').Router();
 const {
   editUserSettingsController,
