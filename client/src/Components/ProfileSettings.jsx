@@ -69,11 +69,6 @@ export default function ProfileSettings(props) {
 
   return (
     <>
-      {notification && (
-        <Alert onClose={() => setNotification('')} severity='success'>
-          {notification}
-        </Alert>
-      )}
       <StyledPaper>
         <Grid align='center'>
           <h4>Please fill this form to update your info</h4>
@@ -205,7 +200,11 @@ export default function ProfileSettings(props) {
               {errors.bio && touched.bio ? (
                 <StyledErrorMessage name='bio'>{errors.bio}</StyledErrorMessage>
               ) : null}
-
+              {notification && (
+                <Alert onClose={() => setNotification('')} severity='success'>
+                  {notification}
+                </Alert>
+              )}
               <StyledButton
                 type='submit'
                 variant='contained'

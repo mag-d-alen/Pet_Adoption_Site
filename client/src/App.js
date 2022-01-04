@@ -13,18 +13,23 @@ import Search from './Components/Search';
 import MyPets from './Components/MyPets';
 import AppContext from './context/AppContext';
 import Profile from './Components/Profile';
+import { makeStyles } from '@mui/styles';
 import './App.css';
 
-require('dotenv').config();
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiPaper-root': {
+      backgroundColor: 'mui is weird',
+    },
+  },
+}));
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const token = localStorage.getItem('token');
-  // useEffect(() => {
-  // }, [token]);
-
+  const classes = useStyles();
   return (
     <AppContext.Provider
       value={{
@@ -36,6 +41,7 @@ function App() {
         token,
         setCurrentUser,
       }}
+      className={classes.root}
     >
       <BrowserRouter>
         <Navbar />
@@ -43,7 +49,6 @@ function App() {
           <Route exact path='/' element={<Home />} />
           <Route path='/searchpet' element={<Search />} />
           <Route path='/searchpet/:id' element={<PetPage />} />
-          {/* <Route path='/:id' element={token ? <Profile /> : <Home />} /> */}
           <Route path='/mypets' element={token ? <MyPets /> : <Home />} />
           <Route path='/mypets/:id' element={token ? <PetPage /> : <Home />} />
           <Route path='/profile' element={token ? <Profile /> : <Home />} />

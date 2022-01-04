@@ -11,9 +11,9 @@ import {
   Select,
 } from '@material-ui/core';
 import { Pets as Icon } from '@mui/icons-material';
-import { Alert, Input, InputAdornment } from '@mui/material';
+import { Alert, InputAdornment } from '@mui/material';
 import styled from '@emotion/styled';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 
 export default function PetForm(props) {
@@ -54,9 +54,6 @@ export default function PetForm(props) {
   const adoptionStatuses = ['available', 'fostered', 'adopted'];
   return (
     <StyledNewDiv>
-      {/* <Grid align='center'>
-        <h2>Please fill this form to add or update new pet data.</h2>
-      </Grid> */}
       <Formik
         enableReinitialize
         validationSchema={validationSchema}

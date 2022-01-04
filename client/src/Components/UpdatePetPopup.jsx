@@ -2,15 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-import {
-  Dialog,
-  Modal,
-  Popover,
-  Grid,
-  Typography,
-  Button,
-  DialogContent,
-} from '@mui/material';
+import { Dialog, Grid, Typography, Button } from '@mui/material';
 import styled from '@emotion/styled';
 import UpdatePet from './UpdatePet';
 import axios from 'axios';
@@ -55,13 +47,11 @@ export default function UpdatePetPopup(props) {
           onBackdropClick={handleBackdropClick}
           disableEscapeKeyDown
         >
-          {/* <DialogContent> */}
           <UpdatePet
             id={id}
             initialValues={initialValues}
             updatePet={props.updatePet}
           />
-          {/* </DialogContent> */}
         </StyledModal>
       </Typography>
 

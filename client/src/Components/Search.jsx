@@ -26,7 +26,6 @@ export default function Search() {
     setPetList([]);
     setAlert('');
   };
-  const handleFormClear = () => {};
 
   return (
     <div>

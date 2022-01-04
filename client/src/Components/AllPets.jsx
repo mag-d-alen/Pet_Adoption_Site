@@ -3,7 +3,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AppContext from '../context/AppContext';
 import { Grid } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PetList from './PetList';
 const url = 'http://localhost:8000';

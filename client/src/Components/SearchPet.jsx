@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { InputLabel, MenuItem, Select } from '@material-ui/core';
 import { Pets as Icon } from '@mui/icons-material';
-
 import styled from '@emotion/styled';
 import axios from 'axios';
 const url = 'http://localhost:8000';
@@ -41,7 +40,7 @@ export default function SearchPet(props) {
   };
 
   return (
-    <StyledPaper>
+    <StyledWrapper>
       <StyledDiv>
         <StyledLabel id='type'> Choose Pet's type:</StyledLabel>
         <StyledSelect name='type' onChange={handleChange}>
@@ -56,14 +55,14 @@ export default function SearchPet(props) {
         Search
         <StyledIcon />
       </StyledButton>
-    </StyledPaper>
+    </StyledWrapper>
   );
 }
 
 const StyledIcon = styled(Icon)`
   margin: 0.3rem;
 `;
-const StyledPaper = styled('div')`
+const StyledWrapper = styled('div')`
   width: 40rem;
   padding: 2rem;
   margin: auto;
@@ -80,7 +79,6 @@ const StyledDiv = styled('div')`
 `;
 const StyledLabel = styled(InputLabel)`
   text-align: right;
-  color: white;
 `;
 const StyledButton = styled('button')`
   margin: auto;
@@ -101,3 +99,20 @@ const StyledSelect = styled(Select)`
   padding: 0.5rem;
   margin: 0.5rem;
 `;
+
+// const StyledSelect = styled('select')`
+//   width: 60%;
+//   padding: 0.5rem;
+//   margin: 0.5rem;
+//   padding: 1.5rem;
+//   text-transform: uppercase;
+//   border: none;
+// `;
+// const StyledOption = styled('option')`
+//   position: absolute;
+//   top: 100%;
+//   left: 0;
+//   right: 0;
+//   z-index: 99;
+//   padding: 1.5rem;
+//   margin: 1.5rem 0;

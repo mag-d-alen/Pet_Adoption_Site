@@ -9,7 +9,6 @@ import UpdatePetPopup from './UpdatePetPopup';
 import { CardMedia, Typography, Button, Box, Alert, Grid } from '@mui/material';
 import styled from '@emotion/styled';
 const url = 'http://localhost:8000';
-
 export default function PetPage() {
   const params = useParams();
   const id = params.id;
@@ -126,7 +125,7 @@ export default function PetPage() {
           <Typography paragraph>breed: {pet.breed}</Typography>
           <Typography paragraph>color: {pet.color}</Typography>
           <Typography paragraph>
-            adoption Status :{pet.adoptionStatus}
+            adoption Status: {pet.adoptionStatus}
           </Typography>
           {pet.dietaryRestrictions && (
             <Typography paragraph>

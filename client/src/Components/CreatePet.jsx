@@ -2,14 +2,12 @@
 import React, { useState, useContext } from 'react';
 import { Grid } from '@material-ui/core';
 import { Pets as Icon } from '@mui/icons-material';
-
 import styled from '@emotion/styled';
-
 import axios from 'axios';
 import AppContext from '../context/AppContext';
 import PetForm from './PetForm';
-const url = 'http://localhost:8000';
 
+const url = 'http://localhost:8000';
 export default function CreatePet() {
   const { token } = useContext(AppContext);
   const [confirmation, setConfirmation] = useState('');
