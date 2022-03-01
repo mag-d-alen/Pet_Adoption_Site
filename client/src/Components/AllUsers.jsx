@@ -2,9 +2,7 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 import AppContext from '../context/AppContext';
-import { Grid, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import styled from '@emotion/styled';
+import { Grid } from '@material-ui/core';
 import axios from 'axios';
 import UserList from './UserList';
 const url = 'http://localhost:8000';

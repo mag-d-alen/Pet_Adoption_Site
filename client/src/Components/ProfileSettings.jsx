@@ -8,7 +8,6 @@ import AppContext from '../context/AppContext';
 import * as Yup from 'yup';
 import { Grid, TextField } from '@material-ui/core';
 import { Alert } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 const url = 'http://localhost:8000';
 
 export default function ProfileSettings(props) {
