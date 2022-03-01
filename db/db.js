@@ -3,8 +3,8 @@
 const { SECRET_KEY, MONGO_URI } = process.env;
 const mongoose = require('mongoose');
 const url = MONGO_URI;
-mongoose.connect(url);
 
+mongoose.connect(url);
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));

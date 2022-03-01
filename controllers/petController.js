@@ -46,6 +46,7 @@ const editPetController = async (req, res) => {
 };
 
 const searchPetsController = async (req, res) => {
+  console.log(req.query);
   try {
     const { maxWeight, minWeight, maxHeight, minHeight, ...searchedPets } =
       req.query;
