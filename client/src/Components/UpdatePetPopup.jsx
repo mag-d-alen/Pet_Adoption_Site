@@ -18,7 +18,6 @@ export default function UpdatePetPopup(props) {
     async function getInitialValues() {
       try {
         const result = await axios.get(`${url}/${id}`);
-
         setInitialValues(result.data);
       } catch (error) {
         console.log(error);

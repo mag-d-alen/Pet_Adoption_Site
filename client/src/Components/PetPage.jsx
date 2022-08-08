@@ -59,7 +59,6 @@ export default function PetPage() {
       }));
 
       if (pet.owner === currentUser._id) {
-        console.log(pet.owner);
         setShowButtons((prevState) => ({
           ...prevState,
           return: true,

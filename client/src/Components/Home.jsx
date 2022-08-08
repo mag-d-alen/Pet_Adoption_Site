@@ -61,6 +61,7 @@ const StyledPara = styled(Grid)`
   background-color: #ffffffa9;
   padding: 1rem 15rem;
   font-family: 'Lato';
+  width: 70%;
 `;
 
 const StyledIcon = styled(Icon)`

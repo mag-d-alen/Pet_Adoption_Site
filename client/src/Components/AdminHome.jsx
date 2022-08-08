@@ -10,11 +10,9 @@ export default function AdminHome() {
   return (
     <Grid align='center'>
       <h1>The home of every Admin</h1>
-
       <StyledLink to='./allusers'>Show All Users</StyledLink>
       <StyledLink to='./allpets'>Show All Pets</StyledLink>
       <StyledLink to='./addpet'>Add Pet</StyledLink>
-
       <Outlet />
     </Grid>
   );

@@ -15,7 +15,6 @@ export default function CreatePet() {
   const handleSubmit = async (values, actions) => {
     const newPet = { ...values, owner: '' };
     actions.resetForm();
-    console.log(newPet);
     try {
       const result = await axios.post(`${url}/pet`, { token, newPet });
       setConfirmation(result.data);
