@@ -48,7 +48,6 @@ export default function ProfileSettings(props) {
   });
 
   const handleSubmit = async (values, actions) => {
-    console.log(values);
     try {
       const newUser = values;
       const id = currentUser._id;
@@ -221,7 +220,7 @@ export default function ProfileSettings(props) {
 }
 const StyledPaper = styled('div')`
   background-color: #ffffffd5;
-  dislay: flex;
+  display: flex;
   justify-items: center;
   align-items: center;
   padding: 1rem;

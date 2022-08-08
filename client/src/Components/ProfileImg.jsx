@@ -3,9 +3,11 @@
 import React, { useState } from "react";
 import { IKImage, IKContext, IKUpload } from "imagekitio-react";
 import { useField } from "formik";
+import { CircularProgress } from "@material-ui/core";
 
 export default function ProfileImg(props) {
   const [image, setImage] = useState("");
+  const [isLoaderOn, setIsLoaderOn] = useState(false);
   const [field, meta, helpers] = useField({ name: props.name });
 
   const onError = (err) => {
@@ -13,9 +15,10 @@ export default function ProfileImg(props) {
   };
 
   const onSuccess = (res) => {
-    console.log(res);
+    setIsLoaderOn(true);
     setImage(res.name);
     helpers.setValue(res.url);
+    setIsLoaderOn(false);
   };
 
   return (
@@ -36,16 +39,20 @@ export default function ProfileImg(props) {
         onError={onError}
         onSuccess={onSuccess}
       />
-      <IKImage
-        path={image}
-        transformation={[
-          {
-            height: "100",
-            width: "100",
-          },
-        ]}
-        // lqip={{ active: true, quality: 10 }}
-      />
+      {isLoaderOn ? (
+        <CircularProgress></CircularProgress>
+      ) : (
+        <IKImage
+          path={image}
+          transformation={[
+            {
+              height: "100",
+              width: "100",
+            },
+          ]}
+          lqip={{ active: true, quality: 10 }}
+        />
+      )}
     </IKContext>
   );
 }
